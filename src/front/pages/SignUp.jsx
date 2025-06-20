@@ -49,12 +49,12 @@ export function SignUp() {
                     </div>
                 </div>
                 <div className="col-12">
-                    <label for="inputAddress" className="form-label">Address</label>
-                    <input type="text" className="form-control" id="inputAddress" placeholder="1234 Main St" />
+                    <label for="inputFullName" className="form-label">Full Name</label>
+                    <input type="text" className="form-control" id="inputFullName" placeholder="Full Name" />
                 </div>
                 <div className="col-12">
-                    <label for="inputAddress2" className="form-label">Address 2</label>
-                    <input type="text" className="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" />
+                    <label for="inputAddress" className="form-label">Address</label>
+                    <input type="text" className="form-control" id="inputAddress" placeholder="123 Main ST" />
                 </div>
                 <div className="col-md-6">
                     <label for="inputCity" className="form-label">City</label>
