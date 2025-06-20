@@ -23,7 +23,19 @@ export function SignUp() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData)
-            })
+            });
+            const data = await resp.json();
+            if (resp.ok) {
+                alert("Successful registration!")
+            } else {
+                alert(data.message || "Registration error!");
+            }
+        } catch (err) {
+            alert("Server error!")
         }
     };
+
+    return (
+
+    );
 };
