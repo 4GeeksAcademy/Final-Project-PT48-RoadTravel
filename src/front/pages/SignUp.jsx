@@ -36,7 +36,7 @@ export function SignUp() {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center">
+        <div className="d-flex justify-content-center align-items-center my-4">
             <form className="container card" style={{ width: "100%", maxWidth: "800px" }}>
                 <div className="row">
                     <div className="col-6">
@@ -56,20 +56,15 @@ export function SignUp() {
                     <label for="inputAddress" className="form-label">Address</label>
                     <input type="text" className="form-control" id="inputAddress" placeholder="123 Main ST" />
                 </div>
-                <div className="col-md-6">
-                    <label for="inputCity" className="form-label">City</label>
-                    <input type="text" className="form-control" id="inputCity" />
-                </div>
-                <div className="col-md-4">
-                    <label for="inputState" className="form-label">State</label>
-                    <select id="inputState" className="form-select">
-                        <option selected>Choose...</option>
-                        <option>...</option>
-                    </select>
-                </div>
-                <div className="col-md-2">
-                    <label for="inputZip" className="form-label">Zip</label>
-                    <input type="text" className="form-control" id="inputZip" />
+                <div className="row">
+                    <div className="col-6">
+                        <label for="inputPhone" className="form-label">Phone</label>
+                        <input type="phone" className="form-control" id="inputPhone" />
+                    </div>
+                    <div className="col-6">
+                        <label for="inputID" className="form-label">ID</label>
+                        <input type="ID" className="form-control" id="inputID" />
+                    </div>
                 </div>
                 <div className="col-12">
                     <div className="form-check">
@@ -80,7 +75,7 @@ export function SignUp() {
                     </div>
                 </div>
                 <div className="col-12 m-2 d-flex justify-content-center">
-                    <button type="submit" className="btn btn-primary">Sign in</button>
+                    <button type="submit" className="btn btn-primary">Sign up</button>
                 </div>
             </form>
         </div>
