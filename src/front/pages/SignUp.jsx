@@ -68,7 +68,7 @@ export function SignUp() {
                 </div>
                 <div className="col-12">
                     <div className="form-check">
-                        <input className="form-check-input" type="checkbox" id="gridCheck" onClick={handleChange}/>
+                        <input className="form-check-input" type="checkbox" id="gridCheck" onChange={handleChange}/>
                         <label className="form-check-label" for="gridCheck">
                             Admin?
                         </label>
