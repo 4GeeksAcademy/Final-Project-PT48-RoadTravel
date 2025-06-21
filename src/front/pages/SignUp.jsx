@@ -19,7 +19,7 @@ export function SignUp() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const resp = await fetch("", {
+            const resp = await fetch("https://turbo-funicular-wr54xg64jwq73g74v-3001.app.github.dev/api/signup", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData)
@@ -68,14 +68,14 @@ export function SignUp() {
                 </div>
                 <div className="col-12">
                     <div className="form-check">
-                        <input className="form-check-input" type="checkbox" id="gridCheck" />
+                        <input className="form-check-input" type="checkbox" id="gridCheck" onClick={handleChange}/>
                         <label className="form-check-label" for="gridCheck">
                             Admin?
                         </label>
                     </div>
                 </div>
                 <div className="col-12 mb-2 d-flex justify-content-center">
-                    <button type="submit" className="btn btn-primary">Sign up</button>
+                    <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Sign up</button>
                 </div>
             </form>
         </div>

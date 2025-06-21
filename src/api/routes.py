@@ -27,20 +27,24 @@ def handle_hello():
 @api.route('/signup', methods=['POST'])
 def create_user():
     data = request.get_json()
-    if not data.get('email') or not data.get('password') or not data.get('fullName'):
-        return jsonify({'msg': 'No data was sent'}), 400
+    if not data.get('email') or not data.get('password') or not data.get('name'):
+        return jsonify({'msg': 'Missing required fields'}), 400
+    
     email = data.get('email')
-    password = data.get('password')
-    is_active = data.get('is_active', False)
+    is_admin = data.get('is_admin', False)
+    name = data.get('name')
+
+    hashed_password = generate_password_hash(data['password'])
 
     created_user = User.query.filter_by(email=email).first()
     if created_user:
         return jsonify({'msg': 'Email is assigned to a created user already'}), 409
 
     new_user = User(
+        name=name,
         email=email,
-        password=password,
-        is_active=is_active
+        password=hashed_password,
+        is_admin=is_admin
     )
     db.session.add(new_user)
 
