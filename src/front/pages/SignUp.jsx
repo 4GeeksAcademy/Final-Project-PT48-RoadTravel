@@ -38,7 +38,7 @@ export function SignUp() {
     return (
         <div className="d-flex justify-content-center align-items-center my-4">
             <form className="container card" style={{ width: "100%", maxWidth: "800px" }}>
-                <div className="row">
+                <div className="row mt-2">
                     <div className="col-6">
                         <label for="inputEmail4" className="form-label">Email</label>
                         <input type="email" className="form-control" id="inputEmail4" />
@@ -74,7 +74,7 @@ export function SignUp() {
                         </label>
                     </div>
                 </div>
-                <div className="col-12 m-2 d-flex justify-content-center">
+                <div className="col-12 mb-2 d-flex justify-content-center">
                     <button type="submit" className="btn btn-primary">Sign up</button>
                 </div>
             </form>
