@@ -1,5 +1,5 @@
 from flask import request, jsonify, Blueprint
-from api.models import db, User, Car, RoleEnum, CarRole
+from api.models import db, User, Car, RoleEnum, CarRole, Booking
 from api.utils import APIException
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -130,6 +130,22 @@ def import_car():
 
     if Car.query.get(data['license_plate']):
         return jsonify({"msg": "Car already exists"}), 409
+    
+@api.route('my-reservation/<int:id>', methods=['GET'])
+@jwt_required()
+def get_reservation():
+    user_id = get_jwt_identity
+    reservation = Booking.query.get(id)
+
+    if not reservation:
+        return jsonify({'msg': 'No reservation listed'}), 404
+    
+    if user_id != reservation:
+        return jsonify({'msg': 'No authorized to see reservation'}), 401
+    
+    else:
+        return jsonify({'msg': 'Reservation listed'}), 200
+
 
     # # External API call to get car specs
     # import requests
