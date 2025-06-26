@@ -7,6 +7,7 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 import DescriptionSubcompactCar from "./pages/DescriptionSubcompactCar.jsx";
 import DescriptionMediumCar from "./pages/DescriptionMediumCar.jsx";
 import DescriptionPremiumCar from "./pages/DescriptionPremiumCar.jsx";
+import ReservationDetails from "./pages/ReservationDetails.jsx"
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
         path: "premium/:lp",
         element: <DescriptionPremiumCar />,
       },
+      {
+        path: "my-reservation/:id",
+        element: <ReservationDetails />
+      }
     ],
   },
 ]);
