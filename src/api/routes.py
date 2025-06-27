@@ -131,32 +131,35 @@ def import_car():
     if Car.query.get(data['license_plate']):
         return jsonify({"msg": "Car already exists"}), 409
     
-@api.route('my-reservation/<int:id>', methods=['GET'])
+@api.route('/my-reservation/<int:id>', methods=['GET'])
 @jwt_required()
-def get_reservation():
+def get_reservation(id):
     user_id = get_jwt_identity
     reservation = Booking.query.get(id)
 
     if not reservation:
         return jsonify({'msg': 'No reservation listed'}), 404
     
-    if user_id != reservation:
+    if user_id != reservation.user_id:
         return jsonify({'msg': 'No authorized to see reservation'}), 401
     
-    else:
-        return jsonify(Booking.serialize()), 200 
+    return jsonify(Booking.serialize()), 200 
 
-@api.route('my-reservation/<int:id>', methods=['DELETE'])
+@api.route('/my-reservation/<int:id>', methods=['DELETE'])
 @jwt_required()
-def delete_reservation():
+def delete_reservation(id):
     user_id = get_jwt_identity
     reservation = Booking.query.get(id)
 
     if not reservation:
         return jsonify({'msg': 'No reservation listed'}), 404
     
-    if user_id != reservation:
-        return jsonify({'msg': 'No authorized to remove reservation'}), 401    
+    if user_id != reservation.user_id:
+        return jsonify({'msg': 'No authorized to remove reservation'}), 401
+    db.session.delete(reservation)
+    db.session.commit()
+
+    return jsonify({'msg': 'Reservation deleted succesfully'}), 200    
 
     
 
