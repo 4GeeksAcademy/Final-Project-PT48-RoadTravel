@@ -144,7 +144,22 @@ def get_reservation():
         return jsonify({'msg': 'No authorized to see reservation'}), 401
     
     else:
-        return jsonify({'msg': 'Reservation listed'}), 200
+        return jsonify(Booking.serialize()), 200 
+
+@api.route('my-reservation/<int:id>', methods=['DELETE'])
+@jwt_required()
+def delete_reservation():
+    user_id = get_jwt_identity
+    reservation = Booking.query.get(id)
+
+    if not reservation:
+        return jsonify({'msg': 'No reservation listed'}), 404
+    
+    if user_id != reservation:
+        return jsonify({'msg': 'No authorized to remove reservation'}), 401    
+
+    
+
 
 
     # # External API call to get car specs
