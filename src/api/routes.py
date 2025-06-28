@@ -230,6 +230,20 @@ def edit_reservation(id):
     
     if start_day_obj > end_day_obj:
         return jsonify({'msg': 'Start day must be before end day'}), 400
+    
+    conflict_booking = Booking.query.filter(
+        Booking.car_id == reservation.car_id, 
+        Booking.id != reservation.id,
+        Booking.start_day <= end_day_obj,
+        Booking.end_day >= start_day_obj
+        ).first()
+    if conflict_booking:
+        return jsonify({'msg': 'Car already booked in that date range'}), 409
+    
+    db.session.add(start_day_obj, end_day_obj)
+    db.session.commit()
+
+    return jsonify({'msg': 'Reservation updated successfully'}), 200
 
 @api.route('/my-reservation/<int:id>', methods=['DELETE'])
 @jwt_required()
