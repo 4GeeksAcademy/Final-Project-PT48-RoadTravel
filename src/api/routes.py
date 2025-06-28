@@ -186,6 +186,16 @@ def make_reservation():
     db.session.commit()
     return jsonify(msg='Reservation created succesfully', new_booking=new_booking.serialize()), 201
 
+@api.route('/my-reservations', methods=['GET'])
+@jwt_required()
+def get_reservations():
+    user_id = get_jwt_identity()
+    reservations = Booking.query.filter_by(user_id=user_id).all()
+
+    if len(reservations) < 1:
+        return jsonify({'msg': 'No reservations listed'}), 404
+
+    return jsonify([reservation.serialize() for reservation in reservations]), 200
 
 @api.route('/my-reservation/<int:id>', methods=['GET'])
 @jwt_required()
@@ -195,11 +205,12 @@ def get_reservation(id):
 
     if not reservation:
         return jsonify({'msg': 'No reservation listed'}), 404
+    print(user_id)
+    print(reservation.user_id)
+    # if user_id != reservation.user_id:
+    #     return jsonify({'msg': 'No authorized to see reservation'}), 403
 
-    if user_id != reservation.user_id:
-        return jsonify({'msg': 'No authorized to see reservation'}), 403
-
-    return jsonify(Booking.serialize()), 200
+    return jsonify(reservation.serialize()), 200
 
 
 @api.route('/my-reservation/<int:id>', methods=['PUT'])
@@ -211,8 +222,8 @@ def edit_reservation(id):
     if not reservation:
         return jsonify({'msg': 'No reservation listed'}), 404
     
-    if user_id != reservation.user_id:
-        return jsonify({'msg': 'No authorized to edit reservation'}), 403
+    # if user_id != reservation.user_id:
+    #     return jsonify({'msg': 'No authorized to edit reservation'}), 403
 
     if not data:
         return jsonify({'msg': 'No data was edited'}), 400
@@ -240,7 +251,8 @@ def edit_reservation(id):
     if conflict_booking:
         return jsonify({'msg': 'Car already booked in that date range'}), 409
     
-    db.session.add(start_day_obj, end_day_obj)
+    reservation.start_day = start_day_obj
+    reservation.end_day = end_day_obj
     db.session.commit()
 
     return jsonify({'msg': 'Reservation updated successfully'}), 200
