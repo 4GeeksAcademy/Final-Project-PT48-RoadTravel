@@ -104,7 +104,7 @@ class Car(db.Model):
 class Booking(db.Model):
     __tablename__ = 'bookings'
 
-    id: Mapped[int] = mapped_column(Integer, Sequence('booking_id_seq'), primary_key=True, autoincrement=True)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     location: Mapped[str] = mapped_column(String(300), nullable=False)
     car_model: Mapped[str] = mapped_column(String(300), nullable=False)  # Cambiado de 'car' a 'car_model'
     amount: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)  # Cambiado a Numeric

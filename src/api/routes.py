@@ -3,7 +3,7 @@ from api.models import db, User, Car, RoleEnum, CarRole, Booking
 from api.utils import APIException
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import timedelta
+from datetime import timedelta, date, datetime
 from flask_cors import CORS
 
 api = Blueprint('api', __name__)
@@ -27,7 +27,8 @@ def create_user():
     data = request.get_json()
 
     required_fields = ['email', 'password', 'name', 'address', 'phone']
-    missing_fields = [field for field in required_fields if not data.get(field)]
+    missing_fields = [
+        field for field in required_fields if not data.get(field)]
 
     if missing_fields:
         return jsonify({'msg': f"Missing fields: {', '.join(missing_fields)}"}), 400
@@ -89,7 +90,8 @@ def login():
     if not user or not check_password_hash(user.password, data['password']):
         return jsonify({"msg": "Bad credentials"}), 401
 
-    token = create_access_token(identity=str(user.id), expires_delta=timedelta(hours=2))
+    token = create_access_token(identity=str(
+        user.id), expires_delta=timedelta(hours=2))
     return jsonify({"access_token": token, "user": user.serialize()}), 200
 
 
@@ -130,7 +132,35 @@ def import_car():
 
     if Car.query.get(data['license_plate']):
         return jsonify({"msg": "Car already exists"}), 409
-    
+
+
+@api.route('/my-reservation', methods=['POST'])
+@jwt_required()
+def make_reservation():
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    car_id = data.get('car_id')
+    location = data.get('location')
+    car_model = data.get('car_model')
+    amount = data.get('amount')
+    start_day_str = data.get('start_day')
+    end_day_str = data.get('end_day')
+    start_day_obj = datetime.strptime(start_day_str, '%Y-%m-%d').date()
+    end_day_obj = datetime.strptime(end_day_str, '%Y-%m-%d').date()
+    new_booking = Booking(
+        user_id=user_id,
+        car_id=car_id,
+        location=location,
+        car_model=car_model,
+        amount=amount,
+        start_day=start_day_obj,
+        end_day=end_day_obj
+    )
+    db.session.add(new_booking)
+    db.session.commit()
+    return jsonify(msg='Reservation created succesfully', new_booking=new_booking.serialize()), 201
+
+
 @api.route('/my-reservation/<int:id>', methods=['GET'])
 @jwt_required()
 def get_reservation(id):
@@ -139,11 +169,24 @@ def get_reservation(id):
 
     if not reservation:
         return jsonify({'msg': 'No reservation listed'}), 404
-    
+
     if user_id != reservation.user_id:
         return jsonify({'msg': 'No authorized to see reservation'}), 401
-    
-    return jsonify(Booking.serialize()), 200 
+
+    return jsonify(Booking.serialize()), 200
+
+
+@api.route('/my-reservation/<int:id>', methods=['PUT'])
+@jwt_required()
+def edit_reservation(id):
+    data = request.get_json()
+    if not data:
+        return jsonify({'msg': 'No data was edited'}), 400
+
+    reserved_car = Booking.query.get(id)
+    reserved_car.start_day = data['start_day']
+    reserved_car.end_day = data['end_day']
+
 
 @api.route('/my-reservation/<int:id>', methods=['DELETE'])
 @jwt_required()
@@ -153,17 +196,13 @@ def delete_reservation(id):
 
     if not reservation:
         return jsonify({'msg': 'No reservation listed'}), 404
-    
+
     if user_id != reservation.user_id:
         return jsonify({'msg': 'No authorized to remove reservation'}), 401
     db.session.delete(reservation)
     db.session.commit()
 
-    return jsonify({'msg': 'Reservation deleted succesfully'}), 200    
-
-    
-
-
+    return jsonify({'msg': 'Reservation deleted succesfully'}), 200
 
     # # External API call to get car specs
     # import requests
