@@ -266,8 +266,8 @@ def delete_reservation(id):
     if not reservation:
         return jsonify({'msg': 'No reservation listed'}), 404
 
-    if user_id != reservation.user_id:
-        return jsonify({'msg': 'No authorized to delete reservation'}), 403
+    # if user_id != reservation.user_id:
+    #     return jsonify({'msg': 'No authorized to delete reservation'}), 403
     db.session.delete(reservation)
     db.session.commit()
 
