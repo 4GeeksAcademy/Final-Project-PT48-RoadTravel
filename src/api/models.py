@@ -68,8 +68,8 @@ class Car(db.Model):
     fuel_type: Mapped[str] = mapped_column(String(50))
     transmission: Mapped[str] = mapped_column(String(50))
     cylinders: Mapped[int] = mapped_column(Integer)
-    displacement: Mapped[str] = mapped_column(String(50))
-    drive: Mapped[str] = mapped_column(String(50))
+    displacement: Mapped[str] = mapped_column(String(50), nullable=True)
+    drive: Mapped[str] = mapped_column(String(50), nullable=True)
     image_url: Mapped[str] = mapped_column(String(500))
 
     # Relaciones

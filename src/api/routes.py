@@ -132,6 +132,32 @@ def import_car():
 
     if Car.query.get(data['license_plate']):
         return jsonify({"msg": "Car already exists"}), 409
+    trans = "automatic" if data.get('transmission') == "a" else "manual"
+
+    car = Car(
+        license_plate=data['license_plate'],
+        name=data['name'],
+        make=data['make'],
+        model=data['model'],
+        year=data['year'],
+        color=data['color'],
+        serial_number=data['serial_number'],
+        pieces=data['pieces'],
+        price=get_price_for_type(data['type']),
+        type=data['type'],
+        status=CarRole[data['status']],  # ← Aquí está la corrección clave
+        image_url=data['image_url'],
+        user_id=uid,
+        fuel_type=data.get('fuel_type'),
+        transmission=trans,
+        cylinders=data.get('cylinders'),
+        displacement=data.get('displacement'),
+        drive=data.get('drive')
+    )
+
+    db.session.add(car)
+    db.session.commit()
+    return jsonify(car.serialize()), 201
 
 
 @api.route('/my-reservation', methods=['POST'])
