@@ -182,6 +182,13 @@ def make_reservation():
         start_day=start_day_obj,
         end_day=end_day_obj
     )
+
+    if not start_day_obj or not end_day_obj:
+        return jsonify({'msg': 'Missing start day or end day'}), 400
+    
+    if start_day_obj > end_day_obj:
+        return jsonify({'msg': 'Start day must be before end day'}), 400
+
     db.session.add(new_booking)
     db.session.commit()
     return jsonify(msg='Reservation created succesfully', new_booking=new_booking.serialize()), 201
