@@ -185,7 +185,7 @@ def make_reservation():
 
     if not start_day_obj or not end_day_obj:
         return jsonify({'msg': 'Missing start day or end day'}), 400
-    
+
     if start_day_obj > end_day_obj:
         return jsonify({'msg': 'Start day must be before end day'}), 400
 
@@ -203,6 +203,7 @@ def get_reservations():
         return jsonify({'msg': 'No reservations listed'}), 404
 
     return jsonify([reservation.serialize() for reservation in reservations]), 200
+
 
 @api.route('/my-reservation/<int:id>', methods=['GET'])
 @jwt_required()
@@ -228,41 +229,42 @@ def edit_reservation(id):
     reservation = Booking.query.get(id)
     if not reservation:
         return jsonify({'msg': 'No reservation listed'}), 404
-    
+
     # if user_id != reservation.user_id:
     #     return jsonify({'msg': 'No authorized to edit reservation'}), 403
 
     if not data:
         return jsonify({'msg': 'No data was edited'}), 400
-    
+
     start_day = data.get('start_day')
     end_day = data.get('end_day')
     if not start_day or not end_day:
         return jsonify({'msg': 'Missing start day or end day'}), 400
-    
+
     try:
         start_day_obj = datetime.strptime(start_day, '%Y-%m-%d').date()
         end_day_obj = datetime.strptime(end_day, '%Y-%m-%d').date()
     except ValueError:
         return jsonify({'msg': 'Invalid date format'}), 400
-    
+
     if start_day_obj > end_day_obj:
         return jsonify({'msg': 'Start day must be before end day'}), 400
-    
+
     conflict_booking = Booking.query.filter(
-        Booking.car_id == reservation.car_id, 
+        Booking.car_id == reservation.car_id,
         Booking.id != reservation.id,
         Booking.start_day <= end_day_obj,
         Booking.end_day >= start_day_obj
-        ).first()
+    ).first()
     if conflict_booking:
         return jsonify({'msg': 'Car already booked in that date range'}), 409
-    
+
     reservation.start_day = start_day_obj
     reservation.end_day = end_day_obj
     db.session.commit()
 
     return jsonify({'msg': 'Reservation updated successfully'}), 200
+
 
 @api.route('/my-reservation/<int:id>', methods=['DELETE'])
 @jwt_required()

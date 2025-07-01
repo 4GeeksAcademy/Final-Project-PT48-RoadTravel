@@ -112,6 +112,7 @@ class Booking(db.Model):
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     start_day: Mapped[date] = mapped_column(Date, nullable=False)
     end_day: Mapped[date] = mapped_column(Date, nullable=False)
+    license_number: Mapped[str] = mapped_column(String(120), nullable=False)
     
     # Relaciones
     user_id: Mapped[int] = mapped_column(ForeignKey('users.id'), nullable=False)
@@ -134,7 +135,8 @@ class Booking(db.Model):
             "start_day": self.start_day.isoformat(),
             "end_day": self.end_day.isoformat(),
             "user_id": self.user_id,
-            "car_id": self.car_id
+            "car_id": self.car_id,
+            "license_number": self.license_number
         }
 
 #-------------------------------------PaypalPayment class----------------------------------------------------
