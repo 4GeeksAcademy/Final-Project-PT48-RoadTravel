@@ -30,14 +30,11 @@ export default function MakeReservation() {
                 <label for="inputCity" className="form-label">License Number</label>
                 <input type="text" className="form-control" id="inputCity" />
             </div>
-            <div className="col-md-4">
-                <label for="inputState" className="form-label">Location</label>
-                <select id="inputState" className="form-select">
-                <option selected>Choose...</option>
-                <option>...</option>
-                </select>
+            <div className="col-md-3">
+                <label for="inputState" className="form-label">Reservation Number</label>
+                <input type="text" className="form-control" id="inputZip" />
             </div>
-            <div className="col-md-2">
+            <div className="col-md-3">
                 <label for="inputZip" className="form-label">Pricing</label>
                 <input type="text" className="form-control" id="inputZip" />
             </div>
