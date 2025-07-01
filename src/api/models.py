@@ -106,8 +106,8 @@ class Booking(db.Model):
 
     id: Mapped[int] = mapped_column(Integer, Sequence('booking_id_seq'), primary_key=True, autoincrement=True)
     location: Mapped[str] = mapped_column(String(300), nullable=False)
-    car_model: Mapped[str] = mapped_column(String(300), nullable=False)  # Cambiado de 'car' a 'car_model'
-    amount: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False)  # Cambiado a Numeric
+    car_model: Mapped[str] = mapped_column(String(300), nullable=False)  
+    amount: Mapped[float] = mapped_column(Numeric(10, 2), nullable=False) 
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     start_day: Mapped[date] = mapped_column(Date, nullable=False)

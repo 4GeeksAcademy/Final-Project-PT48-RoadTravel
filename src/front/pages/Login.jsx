@@ -42,7 +42,7 @@ const Login = () => {
             //     payload: data.user
             // });
 
-            navigate("/private");
+            navigate("/privatehome");
         } catch (err) {
             console.error("Login failed:", err);
             setLoginFailed(true);

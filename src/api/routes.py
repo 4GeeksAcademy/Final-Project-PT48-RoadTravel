@@ -3,10 +3,10 @@ from api.models import db, User, Car, RoleEnum, CarRole, Booking # Asegúrate de
 from api.utils import APIException
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import timedelta, datetime, date # Importa datetime y date
+from datetime import timedelta, datetime, date 
 from flask_cors import CORS
-from sqlalchemy.exc import IntegrityError # Importa IntegrityError para manejo de errores de DB
-from sqlalchemy import or_, not_ # Importa not_ para el filtro de disponibilidad
+from sqlalchemy.exc import IntegrityError  
+from sqlalchemy import or_, not_ 
 
 api = Blueprint('api', __name__)
 # Allow CORS requests to this API
@@ -84,18 +84,18 @@ def login():
 # --- CAR ROUTES ---
 
 @api.route('/cars', methods=['GET'])
-@jwt_required() # Protege esta ruta, ya que privateHome la consume.
+@jwt_required() 
 def list_cars():
     car_type = request.args.get('type')
     start_date_str = request.args.get('start_date')
     end_date_str = request.args.get('end_date')
 
-    query = db.session.query(Car) # Inicia la consulta
+    query = db.session.query(Car) 
 
     if car_type:
         query = query.filter_by(type=car_type)
 
-    # Convertir las fechas de string a objetos date
+
     start_date = None
     end_date = None
     if start_date_str:
@@ -111,18 +111,13 @@ def list_cars():
 
     # Lógica de filtrado por disponibilidad de fechas (sin superposición de reservas)
     if start_date and end_date:
-        # 1. Encuentra los car_id de los coches que *están* reservados en el rango dado.
-        # Una reserva se superpone si: (reserva.start_day <= end_date AND reserva.end_day >= start_date)
         subquery_booked_car_ids = db.session.query(Booking.car_id).filter(
             Booking.start_day <= end_date,
             Booking.end_day >= start_date
-        ).subquery() # Crea una subconsulta de IDs de coches reservados
+        ).subquery() 
 
-        # 2. Filtra la consulta principal para incluir solo los coches cuya license_plate
-        # NO esté en la lista de coches reservados.
         query = query.filter(not_(Car.license_plate.in_(subquery_booked_car_ids)))
     
-    # Asegúrate de que solo se muestren coches activos
     query = query.filter_by(is_active=True)
 
     cars = query.all()
@@ -142,7 +137,6 @@ def get_car(license_plate):
 @jwt_required()
 def import_car():
     uid = int(get_jwt_identity())
-    # Usar db.session.get para obtener por PK
     user = db.session.get(User, uid)
     if not user or user.role != RoleEnum.administrator:
         return jsonify({"msg": "Unauthorized"}), 403
@@ -154,7 +148,6 @@ def import_car():
     if missing:
         return jsonify({"msg": f"Missing fields: {missing}"}), 400
 
-    # Usar db.session.get para comprobar existencia
     if db.session.get(Car, data['license_plate']):
         return jsonify({"msg": "Car already exists"}), 409
 
@@ -187,7 +180,6 @@ def import_car():
         return jsonify(car.serialize()), 201
     except IntegrityError as e:
         db.session.rollback()
-        # Puedes añadir un log aquí para más detalles del error
         return jsonify({"msg": "Error al guardar el coche en la base de datos", "error": str(e)}), 400
     except Exception as e:
         db.session.rollback()
@@ -195,86 +187,3 @@ def import_car():
         return jsonify({"msg": "Error interno del servidor al importar coche", "error": str(e)}), 500
     
 
-@api.route('/bookings', methods=['POST'])
-@jwt_required() # Protege esta ruta: solo usuarios autenticados pueden crear reservas
-def create_booking():
-    user_id = get_jwt_identity() # Obtiene el ID del usuario del token JWT
-    current_user = db.session.get(User, int(user_id)) # Obtiene el objeto User
-
-    if not current_user:
-        return jsonify({'msg': 'User not found'}), 404
-    if not current_user.is_active:
-        return jsonify({'msg': 'User account is not active. Please contact support.'}), 403 # Prohibido
-
-    data = request.get_json()
-
-    required_fields = ['car_id', 'start_day', 'end_day', 'location']
-    missing_fields = [field for field in required_fields if field not in data]
-    if missing_fields:
-        return jsonify({'msg': f"Missing fields: {', '.join(missing_fields)}"}), 400
-
-    car_id = data['car_id']
-    location = data['location']
-
-    # --- 1. Validar y Parsear Fechas ---
-    try:
-        start_day = datetime.strptime(data['start_day'], '%Y-%m-%d').date()
-        end_day = datetime.strptime(data['end_day'], '%Y-%m-%d').date()
-    except ValueError:
-        return jsonify({'msg': 'Formato de fecha inválido. Usa YYYY-MM-DD'}), 400
-
-    if start_day < date.today():
-        return jsonify({'msg': 'La fecha de inicio de la reserva no puede ser en el pasado'}), 400
-    if end_day < start_day:
-        return jsonify({'msg': 'La fecha de fin de la reserva no puede ser anterior a la fecha de inicio'}), 400
-
-    # --- 2. Obtener Detalles del Coche ---
-    car = db.session.get(Car, car_id)
-    if not car:
-        return jsonify({'msg': 'Coche no encontrado con la matrícula proporcionada'}), 404
-    if not car.is_active:
-        return jsonify({'msg': 'Este coche no está activo y no se puede reservar'}), 409 # Conflicto
-
-    # --- 3. Verificar Disponibilidad del Coche ---
-    # Un coche NO está disponible si existe alguna reserva que se superponga
-    # con el rango de fechas solicitado (start_day, end_day).
-    # Superposición: (reserva.start_day <= end_day AND reserva.end_day >= start_day)
-    overlapping_bookings = db.session.query(Booking).filter(
-        Booking.car_id == car_id,
-        Booking.start_day <= end_day,
-        Booking.end_day >= start_day
-    ).count()
-
-    if overlapping_bookings > 0:
-        return jsonify({'msg': 'Este coche no está disponible para las fechas seleccionadas. Ya existe una reserva que se superpone.'}), 409 # Conflicto
-
-    # --- 4. Calcular el Monto de la Reserva ---
-    duration_days = (end_day - start_day).days + 1 # Sumar 1 para incluir el día de inicio
-    if duration_days <= 0: # En caso de que end_day == start_day, la duración es 1 día
-        return jsonify({'msg': 'La duración de la reserva debe ser al menos un día'}), 400
-
-    amount = car.price * duration_days # Asumiendo que car.price es el precio por día
-
-    # --- 5. Crear la Nueva Reserva ---
-    new_booking = Booking(
-        user_id=current_user.id,
-        car_id=car.license_plate,
-        location=location,
-        car_model=car.model, # Usamos el modelo del objeto Car
-        amount=amount,
-        start_day=start_day,
-        end_day=end_day
-    )
-
-    db.session.add(new_booking)
-
-    try:
-        db.session.commit()
-        return jsonify({
-            'msg': 'Booking created successfully',
-            'booking': new_booking.serialize() # Devuelve la reserva recién creada
-        }), 201 # 201 Created
-    except Exception as e:
-        db.session.rollback() # Revierte la transacción en caso de error
-        print(f"Error creating booking: {e}") # Para depuración en el servidor
-        return jsonify({'msg': 'Internal server error while creating booking', 'error': str(e)}), 500

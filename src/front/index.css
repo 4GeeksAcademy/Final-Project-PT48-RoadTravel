@@ -1,6 +1,7 @@
 body {
-  background: linear-gradient(135deg, #333, #555);
-  color: #f0f0f0;
+  /* background: linear-gradient(135deg, #333, #555); */
+  background-color: whitesmoke;
+  color: #000000;
 }
 
 .jumbotron {
@@ -25,4 +26,9 @@ body {
 .title-jumbotrone{
   color: orangered;
   font-weight: bolder;
+}
+
+
+.nav-bar{
+  background-color: orangered;
 }
