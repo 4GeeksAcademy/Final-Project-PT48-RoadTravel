@@ -20,7 +20,7 @@ export default function PrivateHome() {
       const token = sessionStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-
+  
       let url = `${backendUrl}/api/cars?type=${category}`;
       if (start) {
         url += `&start_date=${start}`;
@@ -47,15 +47,15 @@ export default function PrivateHome() {
       console.error(`Car loading failed ${category}:`, error);
       dispatch({ type: "set_cars", category: category, payload: [] });
     }
-  }, [dispatch]);
+  }, [dispatch]); 
 
 
   useEffect(() => {
     fetchCars("subcompact");
     fetchCars("medium");
     fetchCars("premium");
-
-  }, [fetchCars]);
+    
+  }, [fetchCars]); 
 
   useEffect(() => {
     console.log("Estado global (store) actualizado:", store);
@@ -66,14 +66,14 @@ export default function PrivateHome() {
 
   const handleApplyFilters = () => {
 
-    dispatch({
+     dispatch({
       type: "set_startDate",
       payload: {
         startDates: setStartDate,
       },
     });
 
-    dispatch({
+     dispatch({
       type: "set_endDate",
       payload: {
         endDates: setEndDate,
@@ -81,8 +81,8 @@ export default function PrivateHome() {
     });
 
     console.log(store.startDates);
-
-
+    
+   
     fetchCars("subcompact", startDate, endDate);
     fetchCars("medium", startDate, endDate);
     fetchCars("premium", startDate, endDate);
@@ -90,70 +90,70 @@ export default function PrivateHome() {
 
   return (
     <div>
-      <NavbarForUsers home="privatehome" booking="booking" />
+      <NavbarForUsers inicial="privatehome" booking="booking" />
       <div className="container my-4">
-        <h1 className="mb-4 text-center">Vehicle Catalog</h1>
+      <h1 className="mb-4 text-center">Vehicle Catalog</h1>
 
-        <div className="card p-4 mb-4 shadow-sm">
-          <h4 className="mb-3">Choose your dates</h4>
-          <div className="row g-3 align-items-end">
-            <div className="col-md-5">
-              <label htmlFor="startDate" className="form-label">Start Date:</label>
-              <input
-                type="date"
-                className="form-control"
-                id="startDate"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-              />
-            </div>
-            <div className="col-md-5">
-              <label htmlFor="endDate" className="form-label">End Date:</label>
-              <input
-                type="date"
-                className="form-control"
-                id="endDate"
-                value={endDate}
-                onChange={(e) => setEndDate(e.target.value)}
-              />
-            </div>
-            <div className="col-md-2">
-              <button className="btn btn-primary w-100" onClick={handleApplyFilters}>
-                Apply Filter
-              </button>
-            </div>
+      <div className="card p-4 mb-4 shadow-sm">
+        <h4 className="mb-3">Choose your dates</h4>
+        <div className="row g-3 align-items-end">
+          <div className="col-md-5">
+            <label htmlFor="startDate" className="form-label">Start Date:</label>
+            <input 
+              type="date" 
+              className="form-control" 
+              id="startDate" 
+              value={startDate} 
+              onChange={(e) => setStartDate(e.target.value) } 
+            />
           </div>
-          {(startDate || endDate) && (
-            <div className="mt-3 text-end">
-              <button className="btn btn-link btn-sm" onClick={() => { setStartDate(""); setEndDate(""); handleApplyFilters(); }}>
-                Clean Filters
-              </button>
-            </div>
-          )}
+          <div className="col-md-5">
+            <label htmlFor="endDate" className="form-label">End Date:</label>
+            <input 
+              type="date" 
+              className="form-control" 
+              id="endDate" 
+              value={endDate} 
+              onChange={(e) => setEndDate(e.target.value)} 
+            />
+          </div>
+          <div className="col-md-2">
+            <button className="btn btn-primary w-100" onClick={handleApplyFilters }>
+              Apply Filter
+            </button>
+          </div>
         </div>
-
-        <h2>Subcompact Cars</h2>
-        {store.subcompact.length === 0 ? <p>No cars available in this category for the selected dates.</p> :
-          <div className="d-flex flex-wrap">
-            {store.subcompact.map(v => <CardSubcompactCar key={v.license_plate} vehicle={v} />)}
+        {(startDate || endDate) && (
+          <div className="mt-3 text-end">
+            <button className="btn btn-link btn-sm" onClick={() => { setStartDate(""); setEndDate(""); handleApplyFilters(); }}>
+              Clean Filters
+            </button>
           </div>
-        }
-
-        <h2>Medium Cars</h2>
-        {store.medium.length === 0 ? <p>No cars available in this category for the selected dates.</p> :
-          <div className="d-flex flex-wrap">
-            {store.medium.map(v => <CardMediumCar key={v.license_plate} vehicle={v} />)}
-          </div>
-        }
-
-        <h2>Premium Cars</h2>
-        {store.premium.length === 0 ? <p>No cars available in this category for the selected dates.</p> :
-          <div className="d-flex flex-wrap">
-            {store.premium.map(v => <CardPremiumCar key={v.license_plate} vehicle={v} />)}
-          </div>
-        }
+        )}
       </div>
+
+      <h2>Subcompact Cars</h2>
+      {store.subcompact.length === 0 ? <p>No cars available in this category for the selected dates.</p> :
+        <div className="d-flex flex-wrap">
+          {store.subcompact.map(v => <CardSubcompactCar key={v.license_plate} vehicle={v} />)}
+        </div>
+      }
+
+      <h2>Medium Cars</h2>
+      {store.medium.length === 0 ? <p>No cars available in this category for the selected dates.</p> :
+        <div className="d-flex flex-wrap">
+          {store.medium.map(v => <CardMediumCar key={v.license_plate} vehicle={v} />)}
+        </div>
+      }
+
+      <h2>Premium Cars</h2>
+      {store.premium.length === 0 ? <p>No cars available in this category for the selected dates.</p> :
+        <div className="d-flex flex-wrap">
+          {store.premium.map(v => <CardPremiumCar key={v.license_plate} vehicle={v} />)}
+        </div>
+      }
     </div>
+</div>
 
   );
 }

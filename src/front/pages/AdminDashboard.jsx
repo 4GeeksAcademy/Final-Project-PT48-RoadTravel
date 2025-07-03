@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -40,17 +40,17 @@ export default function AdminDashboard() {
   };
 
   const handleFormChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const { name, value, type, checked } = e.target;
 
-    setFormData({
-      ...formData,
-      [name]:
-        type === "checkbox"
-          ? checked
-          : (name === "price" || name === "pieces"
-            ? parseInt(value) || 0
-            : value)
-    });
+  setFormData({
+    ...formData,
+    [name]: 
+      type === "checkbox"
+      ? checked
+      : (name === "price" || name === "pieces"
+         ? parseInt(value) || 0
+         : value)
+  });
   };
 
   const fetchSpecs = async () => {
@@ -101,7 +101,7 @@ export default function AdminDashboard() {
     };
 
     try {
-      const res = await fetch(backendUrl + "/api/cars/import", {
+      const res = await fetch(backendUrl+"/api/cars/import", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -131,133 +131,130 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div>
-      <Navigate home="admin" booking="bookingadmin"/>
-      <div className="container my-5">
-        <h2>Admin Dashboard – Add Car</h2>
+    <div className="container my-5">
+      <h2>Admin Dashboard – Add Car</h2>
 
-        <div className="card p-3 mb-4">
-          <h4>Step 1 – Fetch Car Specs</h4>
-          <div className="row g-3">
-            {["make", "model", "year"].map((field) => (
-              <div className="col-md-4" key={field}>
-                <label className="form-label">{field.toUpperCase()}</label>
-                <input
-                  type={field === "year" ? "number" : "text"}
-                  className="form-control"
-                  name={field}
-                  value={stepOne[field]}
-                  onChange={handleStepOneChange}
-                  required
-                />
-              </div>
-            ))}
-          </div>
-          <button
-            className="btn btn-secondary mt-3"
-            type="button"
-            onClick={fetchSpecs}
-          >
-            Fetch Car Specs
-          </button>
-
-          {specs.fuel_type && (
-            <div className="mt-4">
-              <h5>Fetched Specs:</h5>
-              <ul>
-                {Object.entries(specs).map(([key, val]) => (
-                  <li key={key}>
-                    <strong>{key.replace("_", " ")}:</strong> {val}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-
-        <form className="card p-3" onSubmit={handleSubmit}>
-          <h4>Step 2 – Admin Info</h4>
-
-          {[
-            { name: "license_plate", label: "License Plate" },
-            { name: "name", label: "Name" },
-            { name: "color", label: "Color" },
-            { name: "serial_number", label: "Serial Number" },
-            { name: "pieces", label: "Number of Pieces", type: "number" },
-            { name: "price", label: "Price (USD)", type: "number" },
-            { name: "image_url", label: "Image URL", type: "url" }
-          ].map(({ name, label, type }) => (
-            <div className="mb-3" key={name}>
-              <label className="form-label">{label}</label>
+      <div className="card p-3 mb-4">
+        <h4>Step 1 – Fetch Car Specs</h4>
+        <div className="row g-3">
+          {["make", "model", "year"].map((field) => (
+            <div className="col-md-4" key={field}>
+              <label className="form-label">{field.toUpperCase()}</label>
               <input
-                type={type || "text"}
+                type={field === "year" ? "number" : "text"}
                 className="form-control"
-                name={name}
-                value={formData[name]}
-                onChange={handleFormChange}
+                name={field}
+                value={stepOne[field]}
+                onChange={handleStepOneChange}
                 required
               />
             </div>
           ))}
+        </div>
+        <button
+          className="btn btn-secondary mt-3"
+          type="button"
+          onClick={fetchSpecs}
+        >
+          Fetch Car Specs
+        </button>
 
-          <div className="mb-3">
-            <label className="form-label">Category</label>
-            <select
-              className="form-select"
-              name="type"
-              value={formData.type}
-              onChange={handleFormChange}
-            >
-              <option value="subcompact">Subcompact</option>
-              <option value="medium">Medium</option>
-              <option value="premium">Premium</option>
-            </select>
+        {specs.fuel_type && (
+          <div className="mt-4">
+            <h5>Fetched Specs:</h5>
+            <ul>
+              {Object.entries(specs).map(([key, val]) => (
+                <li key={key}>
+                  <strong>{key.replace("_", " ")}:</strong> {val}
+                </li>
+              ))}
+            </ul>
           </div>
+        )}
+      </div>
 
-          <div className="mb-3">
-            <label className="form-label">Status</label>
-            <select
-              className="form-select"
-              name="status"
-              value={formData.status}
-              onChange={handleFormChange}
-            >
-              <option value="available">Available</option>
-              <option value="rent">Rented</option>
-            </select>
-          </div>
+      <form className="card p-3" onSubmit={handleSubmit}>
+        <h4>Step 2 – Admin Info</h4>
 
-          <div className="mb-3">
-            <label className="form-label">Created At</label>
+        {[
+          { name: "license_plate", label: "License Plate" },
+          { name: "name", label: "Name" },
+          { name: "color", label: "Color" },
+          { name: "serial_number", label: "Serial Number" },
+          { name: "pieces", label: "Number of Pieces", type: "number" },
+          { name: "price", label: "Price (USD)", type: "number" },
+          { name: "image_url", label: "Image URL", type: "url" }
+        ].map(({ name, label, type }) => (
+          <div className="mb-3" key={name}>
+            <label className="form-label">{label}</label>
             <input
-              type="datetime-local"
-              name="created_at"
+              type={type || "text"}
               className="form-control"
-              value={formData.created_at}
+              name={name}
+              value={formData[name]}
               onChange={handleFormChange}
               required
             />
           </div>
+        ))}
 
-          <div className="form-check mb-4">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              name="is_active"
-              checked={formData.is_active}
-              onChange={handleFormChange}
-              id="isActive"
-            />
-            <label className="form-check-label" htmlFor="isActive">
-              Is Active
-            </label>
-          </div>
+        <div className="mb-3">
+          <label className="form-label">Category</label>
+          <select
+            className="form-select"
+            name="type"
+            value={formData.type}
+            onChange={handleFormChange}
+          >
+            <option value="subcompact">Subcompact</option>
+            <option value="medium">Medium</option>
+            <option value="premium">Premium</option>
+          </select>
+        </div>
 
-          <button className="btn btn-primary" type="submit">
-            Save Car to Inventory
-          </button>
-        </form>
-      </div>
+        <div className="mb-3">
+          <label className="form-label">Status</label>
+          <select
+            className="form-select"
+            name="status"
+            value={formData.status}
+            onChange={handleFormChange}
+          >
+            <option value="available">Available</option>
+            <option value="rent">Rented</option>
+          </select>
+        </div>
+
+        <div className="mb-3">
+          <label className="form-label">Created At</label>
+          <input
+            type="datetime-local"
+            name="created_at"
+            className="form-control"
+            value={formData.created_at}
+            onChange={handleFormChange}
+            required
+          />
+        </div>
+
+        <div className="form-check mb-4">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            name="is_active"
+            checked={formData.is_active}
+            onChange={handleFormChange}
+            id="isActive"
+          />
+          <label className="form-check-label" htmlFor="isActive">
+            Is Active
+          </label>
+        </div>
+
+        <button className="btn btn-primary" type="submit">
+          Save Car to Inventory
+        </button>
+      </form>
     </div>
   );
 }
