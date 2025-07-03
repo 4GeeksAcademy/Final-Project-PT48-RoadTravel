@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { Navbar } from "../components/Navbar.jsx";
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 
@@ -50,6 +51,8 @@ const Login = () => {
     };
 
     return (
+        <div>
+            <Navbar />
         <form onSubmit={handleLogin}>
             <div>
                 <label>Email:</label>
@@ -72,6 +75,7 @@ const Login = () => {
             <button type="submit">Login</button>
             {loginFailed && <p style={{ color: "red" }}>Login failed. Please try again.</p>}
         </form>
+        </div>
     );
 };
 

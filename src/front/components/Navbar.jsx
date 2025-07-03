@@ -17,9 +17,9 @@ export const Navbar = () => {
           <Link to="/login">
             <button className="btn btn-success">Login</button>
           </Link>
-          <Link to="/admin">
+          {/* <Link to="/admin">
             <button className="btn btn-outline-warning">Admin</button>
-          </Link>
+          </Link> */}
         </div>
       </div>
     </nav>

@@ -4,6 +4,7 @@ import CardSubcompactCar from "../components/CardSubcompactCar.jsx";
 import CardMediumCar from "../components/CardMediumCar.jsx";
 import CardPremiumCar from "../components/CardPremiumCar.jsx";
 import { useNavigate } from "react-router-dom";
+import { Navbar } from "../components/Navbar.jsx";
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function Home() {
@@ -15,7 +16,10 @@ export default function Home() {
   // validaciones
 
   return (
+    
+    
     <div>
+      <Navbar />
       <div className="jumbotron">
         <div className="container">
           <h1 className="display-4 title-jumbotrone">Welcolm to RoadTravel!</h1>

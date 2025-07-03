@@ -3,6 +3,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import CardSubcompactCar from "../components/CardSubcompactCar.jsx";
 import CardMediumCar from "../components/CardMediumCar.jsx";
 import CardPremiumCar from "../components/CardPremiumCar.jsx";
+import { NavbarForUsers } from "../components/NavbarForUsers.jsx";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -88,7 +89,9 @@ export default function PrivateHome() {
   };
 
   return (
-    <div className="container my-4">
+    <div>
+      <NavbarForUsers/>
+      <div className="container my-4">
       <h1 className="mb-4 text-center">Vehicle Catalog</h1>
 
       <div className="card p-4 mb-4 shadow-sm">
@@ -150,5 +153,7 @@ export default function PrivateHome() {
         </div>
       }
     </div>
+</div>
+
   );
 }
