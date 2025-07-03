@@ -3,7 +3,7 @@ from api.models import db, User, Car, RoleEnum, CarRole, Booking
 from api.utils import APIException
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import timedelta
+from datetime import timedelta, datetime
 from flask_cors import CORS
 from sqlalchemy.exc import IntegrityError  
 from sqlalchemy import or_, not_ 
@@ -302,68 +302,32 @@ def delete_reservation(id):
 
     return jsonify({'msg': 'Reservation deleted succesfully'}), 200
 
-    trans = "automatic" if data.get('transmission') == "a" else "manual"
+  
+    # trans = "automatic" if data.get('transmission') == "a" else "manual"
 
-    car = Car(
-        license_plate=data['license_plate'],
-        name=data['name'],
-        make=data['make'],
-        model=data['model'],
-        year=data['year'],
-        color=data['color'],
-        serial_number=data['serial_number'],
-        pieces=data['pieces'],
-        price=get_price_for_type(data['type']),
-        type=data['type'],
-        status=CarRole[data['status']],
-        image_url=data['image_url'],
-        user_id=uid,
-        fuel_type=data.get('fuel_type'),
-        transmission=trans,
-        cylinders=data.get('cylinders'),
-        displacement=data.get('displacement'),
-        drive=data.get('drive')
-    )
+    # car = Car(
+    #     license_plate=data['license_plate'],
+    #     name=data['name'],
+    #     make=data['make'],
+    #     model=data['model'],
+    #     year=data['year'],
+    #     color=data['color'],
+    #     serial_number=data['serial_number'],
+    #     pieces=data['pieces'],
+    #     price=get_price_for_type(data['type']),
+    #     type=data['type'],
+    #     status=CarRole[data['status']],  # ← Aquí está la corrección clave
+    #     image_url=data['image_url'],
+    #     user_id=uid,
+    #     fuel_type=data.get('fuel_type'),
+    #     transmission=trans,
+    #     cylinders=data.get('cylinders'),
+    #     displacement=data.get('displacement'),
+    #     drive=data.get('drive')
+    # )
 
-    db.session.add(car)
-    try:
-        db.session.commit()
-        return jsonify(car.serialize()), 201
-    except IntegrityError as e:
-        db.session.rollback()
-        return jsonify({"msg": "Error al guardar el coche en la base de datos", "error": str(e)}), 400
-    except Exception as e:
-        db.session.rollback()
-        print(f"Error inesperado al importar coche: {e}")
-        return jsonify({"msg": "Error interno del servidor al importar coche", "error": str(e)}), 500
+    # db.session.add(car)
+    # db.session.commit()
+    # return jsonify(car.serialize()), 201
     
 
-# @api.route('/my-reservation', methods=['POST'])
-# @jwt_required()
-# def make_reservation():
-#     user_id = get_jwt_identity()
-#     data = request.get_json()
-#     car_id = data.get('car_id')
-#     location = data.get('location')
-#     car_model = data.get('car_model')
-#     amount = data.get('amount')
-#     start_day_str = data.get('start_day')
-#     end_day_str = data.get('end_day')
-#     start_day_obj = datetime.strptime(start_day_str, '%Y-%m-%d').date()
-#     end_day_obj = datetime.strptime(end_day_str, '%Y-%m-%d').date()
-#     new_booking = Booking(
-#         user_id=user_id,
-#         car_id=car_id,
-#         location=location,
-#         car_model=car_model,
-#         amount=amount,
-#         start_day=start_day_obj,
-#         end_day=end_day_obj
-#     )
-#     if not start_day_obj or not end_day_obj:
-#         return jsonify({'msg': 'Missing start day or end day'}), 400
-#     if start_day_obj > end_day_obj:
-#         return jsonify({'msg': 'Start day must be before end day'}), 400
-#     db.session.add(new_booking)
-#     db.session.commit()
-#     return jsonify(car.serialize()), 201
