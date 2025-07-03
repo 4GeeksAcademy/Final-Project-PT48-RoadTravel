@@ -10,7 +10,7 @@ export const NavbarForUsers = (prop) => {
         </Link>
 
         <div className="ml-auto d-flex gap-2">
-          <Link to={`/${prop.inicial}`}>
+          <Link to={`/${prop.home}`}>
             <button className="btn btn-primary">Home</button>
           </Link>
           <Link to={`/${prop.booking}`}>
