@@ -77,8 +77,10 @@ def login():
     if not user or not check_password_hash(user.password, data['password']):
         return jsonify({"msg": "Bad credentials"}), 401
 
-    token = create_access_token(identity=str(user.id), expires_delta=timedelta(hours=2))
-    return jsonify({"access_token": token, "user": user.serialize()}), 200
+
+    user_roles = [user.role.value]
+    token = create_access_token(identity=str(user.id), additional_claims={"roles": user_roles}, expires_delta=timedelta(hours=2))
+    return jsonify({"access_token": token, "user": user.serialize(), "roles": user_roles}), 200
 
 
 # --- CAR ROUTES ---
@@ -336,32 +338,32 @@ def delete_reservation(id):
         return jsonify({"msg": "Error interno del servidor al importar coche", "error": str(e)}), 500
     
 
-@api.route('/my-reservation', methods=['POST'])
-@jwt_required()
-def make_reservation():
-    user_id = get_jwt_identity()
-    data = request.get_json()
-    car_id = data.get('car_id')
-    location = data.get('location')
-    car_model = data.get('car_model')
-    amount = data.get('amount')
-    start_day_str = data.get('start_day')
-    end_day_str = data.get('end_day')
-    start_day_obj = datetime.strptime(start_day_str, '%Y-%m-%d').date()
-    end_day_obj = datetime.strptime(end_day_str, '%Y-%m-%d').date()
-    new_booking = Booking(
-        user_id=user_id,
-        car_id=car_id,
-        location=location,
-        car_model=car_model,
-        amount=amount,
-        start_day=start_day_obj,
-        end_day=end_day_obj
-    )
-    if not start_day_obj or not end_day_obj:
-        return jsonify({'msg': 'Missing start day or end day'}), 400
-    if start_day_obj > end_day_obj:
-        return jsonify({'msg': 'Start day must be before end day'}), 400
-    db.session.add(new_booking)
-    db.session.commit()
-    return jsonify(car.serialize()), 201
+# @api.route('/my-reservation', methods=['POST'])
+# @jwt_required()
+# def make_reservation():
+#     user_id = get_jwt_identity()
+#     data = request.get_json()
+#     car_id = data.get('car_id')
+#     location = data.get('location')
+#     car_model = data.get('car_model')
+#     amount = data.get('amount')
+#     start_day_str = data.get('start_day')
+#     end_day_str = data.get('end_day')
+#     start_day_obj = datetime.strptime(start_day_str, '%Y-%m-%d').date()
+#     end_day_obj = datetime.strptime(end_day_str, '%Y-%m-%d').date()
+#     new_booking = Booking(
+#         user_id=user_id,
+#         car_id=car_id,
+#         location=location,
+#         car_model=car_model,
+#         amount=amount,
+#         start_day=start_day_obj,
+#         end_day=end_day_obj
+#     )
+#     if not start_day_obj or not end_day_obj:
+#         return jsonify({'msg': 'Missing start day or end day'}), 400
+#     if start_day_obj > end_day_obj:
+#         return jsonify({'msg': 'Start day must be before end day'}), 400
+#     db.session.add(new_booking)
+#     db.session.commit()
+#     return jsonify(car.serialize()), 201

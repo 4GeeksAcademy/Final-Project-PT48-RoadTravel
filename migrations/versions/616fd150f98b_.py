@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 76033bb40eb7
+Revision ID: 616fd150f98b
 Revises: 
-Create Date: 2025-06-23 15:07:37.854237
+Create Date: 2025-07-03 02:10:23.406033
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '76033bb40eb7'
+revision = '616fd150f98b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,6 +23,8 @@ def upgrade():
     sa.Column('email', sa.String(length=120), nullable=False),
     sa.Column('password', sa.String(length=256), nullable=False),
     sa.Column('name', sa.String(length=120), nullable=False),
+    sa.Column('address', sa.String(length=120), nullable=False),
+    sa.Column('phone', sa.String(length=120), nullable=False),
     sa.Column('role', sa.Enum('administrator', 'client', name='roleenum'), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
@@ -39,14 +41,14 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('status', sa.Enum('available', 'rent', name='carrole'), nullable=False),
-    sa.Column('model', sa.Integer(), nullable=False),
+    sa.Column('model', sa.String(length=120), nullable=False),
     sa.Column('make', sa.String(length=120), nullable=False),
     sa.Column('year', sa.Integer(), nullable=False),
     sa.Column('fuel_type', sa.String(length=50), nullable=False),
     sa.Column('transmission', sa.String(length=50), nullable=False),
     sa.Column('cylinders', sa.Integer(), nullable=False),
-    sa.Column('displacement', sa.String(length=50), nullable=False),
-    sa.Column('drive', sa.String(length=50), nullable=False),
+    sa.Column('displacement', sa.String(length=50), nullable=True),
+    sa.Column('drive', sa.String(length=50), nullable=True),
     sa.Column('image_url', sa.String(length=500), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
@@ -61,6 +63,7 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('start_day', sa.Date(), nullable=False),
     sa.Column('end_day', sa.Date(), nullable=False),
+    sa.Column('license_number', sa.String(length=120), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('car_id', sa.String(length=20), nullable=False),
     sa.ForeignKeyConstraint(['car_id'], ['cars.license_plate'], ),
