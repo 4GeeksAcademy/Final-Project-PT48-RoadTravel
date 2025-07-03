@@ -43,7 +43,18 @@ const Login = () => {
             //     payload: data.user
             // });
 
-            navigate("/privatehome");
+            const userRoles = data.roles || []; // Usa data.roles (plural), no data.role (singular)
+
+            if (userRoles.includes("client")) { // Verifica si el array incluye "administrator"
+                navigate("/privatehome");
+            } else if (userRoles.includes("administrator")) { // Verifica si el array incluye "client"
+                navigate("/admin");
+            } else {
+                // Opcional: Maneja casos donde el rol no es 'administrator' ni 'client'
+                navigate("/"); // Ruta por defecto si no hay coincidencia de rol específica
+                console.warn("Usuario inició sesión con rol(es) no manejado(s):", userRoles);
+            }
+
         } catch (err) {
             console.error("Login failed:", err);
             setLoginFailed(true);
@@ -53,28 +64,28 @@ const Login = () => {
     return (
         <div>
             <Navbar />
-        <form onSubmit={handleLogin}>
-            <div>
-                <label>Email:</label>
-                <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                />
-            </div>
-            <div>
-                <label>Password:</label>
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                />
-            </div>
-            <button type="submit">Login</button>
-            {loginFailed && <p style={{ color: "red" }}>Login failed. Please try again.</p>}
-        </form>
+            <form onSubmit={handleLogin}>
+                <div>
+                    <label>Email:</label>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>Password:</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <button type="submit">Login</button>
+                {loginFailed && <p style={{ color: "red" }}>Login failed. Please try again.</p>}
+            </form>
         </div>
     );
 };

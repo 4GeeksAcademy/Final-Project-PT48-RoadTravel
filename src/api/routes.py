@@ -77,8 +77,13 @@ def login():
     if not user or not check_password_hash(user.password, data['password']):
         return jsonify({"msg": "Bad credentials"}), 401
 
-    token = create_access_token(identity=str(user.id), expires_delta=timedelta(hours=2))
-    return jsonify({"access_token": token, "user": user.serialize()}), 200
+    user_roles = [user.role.value]
+    token = create_access_token(
+        identity=str(user.id),
+        additional_claims={"roles": user_roles}, 
+        expires_delta=timedelta(hours=2)
+    )
+    return jsonify({"access_token": token, "user": user.serialize(), "roles": user_roles}), 200
 
 
 # --- CAR ROUTES ---

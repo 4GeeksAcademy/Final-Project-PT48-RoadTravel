@@ -90,7 +90,7 @@ export default function PrivateHome() {
 
   return (
     <div>
-      <NavbarForUsers/>
+      <NavbarForUsers inicial="privatehome" booking="booking" />
       <div className="container my-4">
       <h1 className="mb-4 text-center">Vehicle Catalog</h1>
 

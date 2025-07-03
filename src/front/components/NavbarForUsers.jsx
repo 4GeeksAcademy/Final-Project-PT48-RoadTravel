@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 
-export const NavbarForUsers = () => {
+export const NavbarForUsers = (prop) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light nav-bar">
       <div className="container ">
@@ -10,10 +10,10 @@ export const NavbarForUsers = () => {
         </Link>
 
         <div className="ml-auto d-flex gap-2">
-          <Link to="/privatehome">
+          <Link to={`/${prop.inicial}`}>
             <button className="btn btn-primary">Home</button>
           </Link>
-          <Link to="/">
+          <Link to={`/${prop.booking}`}>
             <button className="btn btn-success">My Bookings</button>
           </Link>
           <Link to="/">
