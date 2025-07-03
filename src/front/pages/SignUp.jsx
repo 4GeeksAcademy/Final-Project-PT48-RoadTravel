@@ -67,42 +67,39 @@ export function SignUp() {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center my-4">
-            {/* Aplica onSubmit al formulario */}
-            <form className="container card" style={{ width: "100%", maxWidth: "800px" }} onSubmit={handleSubmit}>
-                <div className="row mt-2">
-                    <div className="col-6">
-                        {/* Asegúrate de que el 'for' en label coincida con el 'id' del input */}
-                        <label htmlFor="inputEmail4" className="form-label">Email</label>
-                        <input type="email" name="email" value={formData.email} onChange={handleChange} className="form-control" id="inputEmail4" />
-                    </div>
-                    <div className="col-6">
-                        <label htmlFor="inputPassword4" className="form-label">Password</label>
-                        <input type="password" name="password" value={formData.password} onChange={handleChange} className="form-control" id="inputPassword4" />
-                    </div>
+        <div className="container d-flex justify-content-center align-items-center my-5">
+            <form onSubmit={handleSubmit} className="card p-4" style={{ maxWidth: "600px", width: "100%" }}>
+                <h3 className="mb-4 text-center">Sign Up</h3>
+
+                <div className="mb-3">
+                    <label htmlFor="inputEmail" className="form-label">Email</label>
+                    <input type="email" name="email" className="form-control" id="inputEmail" value={formData.email} onChange={handleChange} required />
                 </div>
-                <div className="col-12">
+
+                <div className="mb-3">
+                    <label htmlFor="inputPassword" className="form-label">Password</label>
+                    <input type="password" name="password" className="form-control" id="inputPassword" value={formData.password} onChange={handleChange} required />
+                </div>
+
+                <div className="mb-3">
                     <label htmlFor="inputFullName" className="form-label">Full Name</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} className="form-control" id="inputFullName" placeholder="Full Name" />
+                    <input type="text" name="name" className="form-control" id="inputFullName" value={formData.name} onChange={handleChange} required />
                 </div>
-                <div className="col-12">
+
+                <div className="mb-3">
                     <label htmlFor="inputAddress" className="form-label">Address</label>
-                    <input type="text" name="address" value={formData.address} onChange={handleChange} className="form-control" id="inputAddress" placeholder="123 Main ST" />
+                    <input type="text" name="address" className="form-control" id="inputAddress" value={formData.address} onChange={handleChange} />
                 </div>
-                <div className="row">
-                    <div className="col-6">
-                        <label htmlFor="inputPhone" className="form-label">Phone</label>
-                        <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="form-control" id="inputPhone" /> {/* Cambiado a type="tel" para teléfonos */}
-                    </div>
+
+                <div className="mb-3">
+                    <label htmlFor="inputPhone" className="form-label">Phone</label>
+                    <input type="tel" name="phone" className="form-control" id="inputPhone" value={formData.phone} onChange={handleChange} />
                 </div>
-                
-                <div className="col-12 mb-2 d-flex justify-content-center">
-                    {/* Quita el onClick de aquí, el onSubmit del form ya lo manejará */}
-                    <button type="submit" className="btn btn-primary">Sign up</button>
-                </div>
+
+                <button type="submit" className="btn btn-primary w-100">Register</button>
             </form>
         </div>
     );
-};
+}
 
 export default SignUp;

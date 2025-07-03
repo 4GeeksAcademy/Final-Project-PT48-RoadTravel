@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-// import { Navbar } from "../components/Navbar.jsx";
+import useGlobalReducer from "../hooks/useGlobalReducer";
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
-
 
 const Login = () => {
     const navigate = useNavigate();
@@ -11,10 +9,14 @@ const Login = () => {
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loginSuccess, setLoginSuccess] = useState(false);
     const [loginFailed, setLoginFailed] = useState(false);
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        setLoginSuccess(false);
+        setLoginFailed(false);
+
         try {
             const res = await fetch(`${backendUrl}/api/login`, {
                 method: "POST",
@@ -32,7 +34,6 @@ const Login = () => {
             const data = await res.json();
 
             sessionStorage.setItem("token", data.access_token);
-
             dispatch({
                 type: "login_success",
                 payload: {
@@ -41,30 +42,15 @@ const Login = () => {
                 }
             });
 
+            setLoginSuccess(true);
 
-            // dispatch({
-            //     type: "SET_TOKEN",
-            //     payload: data.access_token
-            // });
-
-            // dispatch({
-            //     type: "SET_USER",
-            //     payload: data.user
-            // });
-
-            const userRoles = data.roles || []; // Usa data.roles (plural), no data.role (singular)
-
-            if (userRoles.includes("client")) { // Verifica si el array incluye "administrator"
-
+            const userRoles = data.roles || [];
+            if (userRoles.includes("client")) {
                 navigate("/private");
-
-
-            } else if (userRoles.includes("administrator")) { // Verifica si el array incluye "client"
+            } else if (userRoles.includes("administrator")) {
                 navigate("/admin");
             } else {
-                // Opcional: Maneja casos donde el rol no es 'administrator' ni 'client'
-                navigate("/"); // Ruta por defecto si no hay coincidencia de rol específica
-                console.warn("Usuario inició sesión con rol(es) no manejado(s):", userRoles);
+                navigate("/");
             }
 
         } catch (err) {
@@ -74,29 +60,47 @@ const Login = () => {
     };
 
     return (
-        <div>
-            {/* <Navbar /> */}
-            <form onSubmit={handleLogin}>
-                <div>
-                    <label>Email:</label>
+        <div className="container mt-5" style={{ maxWidth: "600px" }}>
+            <form onSubmit={handleLogin} className="card p-4 shadow-sm">
+                <h3 className="mb-4">Login</h3>
+
+                {loginSuccess && (
+                    <div className="alert alert-success alert-dismissible fade show" role="alert">
+                        Login successful!
+                        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                )}
+
+                {loginFailed && (
+                    <div className="alert alert-danger alert-dismissible fade show" role="alert">
+                        Login failed. Please check your credentials and try again.
+                        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                )}
+
+                <div className="mb-3">
+                    <label className="form-label">Email:</label>
                     <input
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
+                        className="form-control"
                     />
                 </div>
-                <div>
-                    <label>Password:</label>
+
+                <div className="mb-3">
+                    <label className="form-label">Password:</label>
                     <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
+                        className="form-control"
                     />
                 </div>
-                <button type="submit">Login</button>
-                {loginFailed && <p style={{ color: "red" }}>Login failed. Please try again.</p>}
+
+                <button type="submit" className="btn btn-primary w-100">Login</button>
             </form>
         </div>
     );
