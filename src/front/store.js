@@ -2,7 +2,9 @@ export const initialStore = () => ({
   subcompact: [],
   medium: [],
   premium: [],
-  favorites: []
+  favorites: [],
+  startDates: [],
+  endDates: []
 });
 
 export default function storeReducer(store, action = {}) {
@@ -23,6 +25,22 @@ export default function storeReducer(store, action = {}) {
         ...store,
         favorites: store.favorites.filter(f => f.license_plate !== action.payload.license_plate)
       };
+
+      case "set_startDate":
+      const { startDates } = action.payload
+
+      return {
+        ...store,
+        startDates: startDates
+      }
+
+      case "set_endDate":
+      const { endDates } = action.payload
+
+      return {
+        ...store,
+        endDates: endDates
+      }
 
     default:
       throw new Error("Unknown action " + action.type);

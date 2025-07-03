@@ -1,4 +1,34 @@
 body {
-  background: linear-gradient(135deg, #333, #555);
-  color: #f0f0f0;
+  /* background: linear-gradient(135deg, #333, #555); */
+  background-color: whitesmoke;
+  color: #000000;
+}
+
+.jumbotron {
+  background-image: url("https://www.bmw-m.com/content/dam/bmw/marketBMW_M/www_bmw-m_com/all-models/m-automobile/m5-limousine/2024/bmw-m5-sedan-hd-01-2.jpg");
+  /* Agrega otras propiedades para asegurar que el fondo se vea bien */
+  background-size: cover; /* Para que la imagen cubra todo el jumbotron */
+  background-position: center; /* Para centrar la imagen */
+  background-repeat: no-repeat; /* Para evitar que la imagen se repita */
+  height: 400px; /* O cualquier altura que necesites para el jumbotron */
+  display: flex; /* Para centrar contenido si lo hay */
+  align-items: center;
+  justify-content: center;
+  color: white; /* Si tienes texto sobre la imagen */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Sombra para el texto */
+}
+
+.sides{
+  margin: 0;
+  padding: 0;
+}
+
+.title-jumbotrone{
+  color: orangered;
+  font-weight: bolder;
+}
+
+
+.nav-bar{
+  background-color: orangered;
 }

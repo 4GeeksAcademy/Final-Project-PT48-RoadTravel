@@ -3,65 +3,66 @@ import useGlobalReducer from "../hooks/useGlobalReducer";
 import CardSubcompactCar from "../components/CardSubcompactCar.jsx";
 import CardMediumCar from "../components/CardMediumCar.jsx";
 import CardPremiumCar from "../components/CardPremiumCar.jsx";
+import { useNavigate } from "react-router-dom";
+import { Navbar } from "../components/Navbar.jsx";
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function Home() {
-  const { store, dispatch } = useGlobalReducer();
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-    fetch(backendUrl+"/api/cars?type=subcompact", { headers })
-      .then(r => r.json())
-      .then(data => dispatch({ type: "set_cars", category: "subcompact", payload: data }))
-      .catch(console.error);
 
-    fetch(backendUrl+"/api/cars?type=medium", { headers })
-      .then(r => r.json())
-      .then(data => dispatch({ type: "set_cars", category: "medium", payload: data }))
-      .catch(console.error);
-
-    fetch(backendUrl+"/api/cars?type=premium", { headers })
-      .then(r => r.json())
-      .then(data => dispatch({ type: "set_cars", category: "premium", payload: data }))
-      .catch(console.error);
-  }, []);
 
   // validaciones
 
   return (
-    <div className="container my-4">
-      <h2>Favorites</h2>
-      {store.favorites.length === 0 ? <p>No favorites yet.</p> :
-        <div className="d-flex flex-wrap">
-          {store.favorites.map(v => (
-            <CardSubcompactCar key={v.license_plate} vehicle={v} />
-          ))}
-        </div>
-      }
+    
+    
+    <div>
+      <Navbar />
+      <div className="jumbotron">
+        <div className="container">
+          <h1 className="display-4 title-jumbotrone">Welcolm to RoadTravel!</h1>
+          <p className="lead">Take control of your journey</p>
+          <hr className="my-4" />
+          <button onClick={() => navigate("/signup")} className="btn btn-primary btn-lg" href="#" role="button">Let's start</button>
 
-      <h2>Subcompact Cars</h2>
-      {store.subcompact.length === 0 ? <p>No cars available in this category.</p> :
-        <div className="d-flex flex-wrap">
-          {store.subcompact.map(v => <CardSubcompactCar key={v.license_plate} vehicle={v} />)}
         </div>
-      }
 
-      <h2>Medium Cars</h2>
-      {store.medium.length === 0 ? <p>No cars available in this category.</p> :
-        <div className="d-flex flex-wrap">
-          {store.medium.map(v => <CardMediumCar key={v.license_plate} vehicle={v} />)}
-        </div>
-      }
+      </div>
 
-      <h2>Premium Cars</h2>
-      {store.premium.length === 0 ? <p>No cars available in this category.</p> :
-        <div className="d-flex flex-wrap">
-          {store.premium.map(v => <CardPremiumCar key={v.license_plate} vehicle={v} />)}
+      <div className="container my-4">
+        <h2 className="text-center my-4">Our Different Ranges</h2>
+        <div className="row d-flex justify-content-between container px-4">
+          <div className="col-md-4 card" style={{width: '340px'}}>
+            <img src="https://www.buyatoyota.com/sharpr/bat/assets/img/vehicle-info/corollahatchback/2025/hero-image.png" className="card-img-top" alt="..."/>
+              <div className="card-body">
+                <h3 className="text-center">SubCompact</h3>
+              </div>
+          </div>
+
+          <div className="col-md-4 card" style={{width: '340px'}}>
+            <img src="https://www.buyatoyota.com/sharpr/bat/assets/img/vehicle-info/corollahatchback/2025/hero-image.png" className="card-img-top" alt="..."/>
+              <div className="card-body">
+                <h3 className="text-center">Medium</h3>
+              </div>
+          </div>
+
+          <div className="col-md-4 card" style={{width: '340px'}}>
+            <img src="https://www.buyatoyota.com/sharpr/bat/assets/img/vehicle-info/corollahatchback/2025/hero-image.png" className="card-img-top" alt="..."/>
+              <div className="card-body">
+                <h3 className="text-center">Premium</h3>
+              </div>
+          </div>
         </div>
-      }
+      </div>
+
+      <div>
+
+      </div>
     </div>
+
+
   );
 }
 
