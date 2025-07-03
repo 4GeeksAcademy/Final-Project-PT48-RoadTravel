@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Link } from "react-router-dom"; // Link es para navegar con tags <Link>, no para redireccionar programáticamente. Está bien si lo usas en otras partes.
+import { Link } from "react-router-dom";
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export function SignUp() {
@@ -19,12 +19,12 @@ export function SignUp() {
             [name]: value
         });
     };
-    
-    const navigate = useNavigate(); // Inicializa useNavigate
+
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Siempre lo primero en handleSubmit
-        console.log("Datos del formulario a enviar:", formData); // Para depuración
+        e.preventDefault();
+        console.log("Datos del formulario a enviar:", formData);
 
         try {
             const resp = await fetch(backendUrl + "/api/signup", {
@@ -33,36 +33,28 @@ export function SignUp() {
                 body: JSON.stringify(formData)
             });
 
-            const data = await resp.json(); // Parsea la respuesta JSON
+            const data = await resp.json();
 
             if (resp.ok) {
-                alert("¡Registro exitoso!");
+                alert("¡Sign Up Successful!");
 
-                // ASUMO que tu backend devuelve un objeto user con el rol, por ejemplo:
-                // { message: "Successful registration!", user: { id: 1, email: "...", role: "client" } }
-                // O directamente { role: "client" }
-                
-                // *** Paso Clave 1: Acceder al rol del usuario en la respuesta ***
-                // Es muy importante que tu backend realmente devuelva 'data.user.role' o 'data.role'
-                const userRole = data.user ? data.user.role : null; 
-                console.log("Rol del usuario recibido:", userRole); // Para depuración
+                const userRole = data.user ? data.user.role : null;
+                console.log("User role received:", userRole);
 
-                // *** Paso Clave 2: Redirigir según el rol ***
-                if (userRole === "client") { 
-                    navigate("/privateHome"); 
-                } 
+                if (userRole === "client") {
+                    navigate("/privateHome");
+                }
                 else {
-                    // Si el rol no es "client", o si no se recibe un rol claro,
-                    // puedes redirigir a una página predeterminada (ej. inicio o un dashboard general).
-                    navigate("/"); 
+
+                    navigate("/");
                 }
 
             } else {
-                alert(data.message || "¡Error en el registro! Inténtalo de nuevo."); 
+                alert(data.message || "Registration error! Please try again.");
             }
         } catch (err) {
-            console.error("Error del servidor al registrar:", err); // Mensaje más específico
-            alert("¡Error del servidor! No se pudo completar el registro.");
+            console.error("Server error while registering:", err);
+            alert("Server error! Registration could not be completed.");
         }
     };
 
