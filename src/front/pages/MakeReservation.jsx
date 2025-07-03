@@ -1,13 +1,14 @@
 import { use } from 'react';
+import useGlobalReducer from "../hooks/useGlobalReducer";
 import { useParams, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function MakeReservation() {
+    const {store, dispatch} = useGlobalReducer()
     const navigate = useNavigate()
-    const [carId, setCarId] = useState("")
-    const [carModel, setCarModel] = useState("")
-
+    
+    
     return (
         <form className="row g-3 d-flex justify-content-center align-items-center my-4">
             <div className="col-md-9">
