@@ -8,6 +8,7 @@ import AdminDashboard from "./pages/AdminDashboard.jsx";
 import DescriptionSubcompactCar from "./pages/DescriptionSubcompactCar.jsx";
 import DescriptionMediumCar from "./pages/DescriptionMediumCar.jsx";
 import DescriptionPremiumCar from "./pages/DescriptionPremiumCar.jsx";
+import MakeReservation from "./pages/MakeReservation.jsx"
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
         path: "premium/:lp",
         element: <DescriptionPremiumCar />,
       },
+      {
+        path: "place-reservation",
+        element: <MakeReservation />
+      }
     ],
   },
 ]);
