@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
-import { Navbar } from "../components/Navbar.jsx";
+// import { Navbar } from "../components/Navbar.jsx";
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 
@@ -33,6 +33,15 @@ const Login = () => {
 
             sessionStorage.setItem("token", data.access_token);
 
+            dispatch({
+                type: "login_success",
+                payload: {
+                    token: data.access_token,
+                    user: data.user
+                }
+            });
+
+
             // dispatch({
             //     type: "SET_TOKEN",
             //     payload: data.access_token
@@ -46,7 +55,10 @@ const Login = () => {
             const userRoles = data.roles || []; // Usa data.roles (plural), no data.role (singular)
 
             if (userRoles.includes("client")) { // Verifica si el array incluye "administrator"
-                navigate("/privatehome");
+
+                navigate("/private");
+
+
             } else if (userRoles.includes("administrator")) { // Verifica si el array incluye "client"
                 navigate("/admin");
             } else {
@@ -63,7 +75,7 @@ const Login = () => {
 
     return (
         <div>
-            <Navbar />
+            {/* <Navbar /> */}
             <form onSubmit={handleLogin}>
                 <div>
                     <label>Email:</label>

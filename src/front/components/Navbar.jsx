@@ -1,25 +1,41 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Navbar = () => {
-	const { store, dispatch } = useGlobalReducer()
+  const { store, dispatch } = useGlobalReducer();
+  const isAuthenticated = store?.isAuthenticated;
+
+  const handleLogout = () => {
+    dispatch({ type: "logout" });
+    navigate("/login");
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light nav-bar">
-      <div className="container ">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <div className="container">
         <Link className="navbar-brand" to="/">
           Road Travel Rent-a-Car
         </Link>
 
         <div className="ml-auto d-flex gap-2">
-          <Link to="/signup">
-            <button className="btn btn-primary">Sign Up</button>
-          </Link>
-          <Link to="/login">
-            <button className="btn btn-success">Login</button>
-          </Link>
-          {/* <Link to="/admin">
+          {!isAuthenticated && (
+            <>
+              <Link to="/signup">
+                <button className="btn btn-outline-primary">Sign Up</button>
+              </Link>
+              <Link to="/login">
+                <button className="btn btn-outline-success">Login</button>
+              </Link>
+            </>
+          )}
+          {isAuthenticated && (
+            <button className="btn btn-outline-danger" onClick={handleLogout}>
+              Logout
+            </button>
+          )}
+          <Link to="/admin">
             <button className="btn btn-outline-warning">Admin</button>
-          </Link> */}
+          </Link>
         </div>
       </div>
     </nav>

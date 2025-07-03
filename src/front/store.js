@@ -1,11 +1,31 @@
-export const initialStore = () => ({
-  subcompact: [],
-  medium: [],
-  premium: [],
-  favorites: [],
-  startDates: [],
-  endDates: []
-});
+export const initialStore = () => {
+
+  const token = localStorage.getItem("token");
+  const userData = localStorage.getItem("user");
+  let user = null;
+
+  try {
+    if (userData) {
+      user = JSON.parse(userData);
+    }
+  } catch (error) {
+    console.error("Failed to parse user from localStorage:", error);
+    localStorage.removeItem("user");
+  }
+
+  return {
+    subcompact: [],
+    medium: [],
+    premium: [],
+    favorites: [],
+    startDates: [],
+    endDates: [],
+    token: token,
+    user: user,
+    isAuthenticated: !!token,
+  };
+
+};
 
 export default function storeReducer(store, action = {}) {
   switch (action.type) {
@@ -41,6 +61,26 @@ export default function storeReducer(store, action = {}) {
         ...store,
         endDates: endDates
       }
+
+      case "login_success":
+      localStorage.setItem("token", action.payload.token);
+      localStorage.setItem("user", JSON.stringify(action.payload.user));
+      return {
+        ...store,
+        token: action.payload.token,
+        user: action.payload.user,
+        isAuthenticated: true,
+      };
+
+    case "logout":
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      return {
+        ...store,
+        token: null,
+        user: null,
+        isAuthenticated: false,
+      };
 
     default:
       throw new Error("Unknown action " + action.type);
