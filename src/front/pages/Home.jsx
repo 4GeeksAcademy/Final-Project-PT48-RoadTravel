@@ -22,7 +22,7 @@ export default function Home() {
       <Navbar />
       <div className="jumbotron">
         <div className="container">
-          <h1 className="display-4 title-jumbotrone">Welcolm to RoadTravel!</h1>
+          <h1 className="display-4 title-jumbotrone">Welcome to RoadTravel!</h1>
           <p className="lead">Take control of your journey</p>
           <hr className="my-4" />
           <button onClick={() => navigate("/signup")} className="btn btn-primary btn-lg" href="#" role="button">Let's start</button>
