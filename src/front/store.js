@@ -3,8 +3,8 @@ export const initialStore = () => ({
   medium: [],
   premium: [],
   favorites: [],
-  startDates: [],
-  endDates: []
+  startDates: null, // Cambia a null o una cadena vacía para una sola fecha
+  endDates: null,   // Cambia a null o una cadena vacía para una sola fecha
 });
 
 export default function storeReducer(store, action = {}) {
@@ -26,21 +26,19 @@ export default function storeReducer(store, action = {}) {
         favorites: store.favorites.filter(f => f.license_plate !== action.payload.license_plate)
       };
 
-      case "set_startDate":
-      const { startDates } = action.payload
-
+    case "set_startDate":
+      // Almacena la cadena de fecha real de inicio
       return {
         ...store,
-        startDates: startDates
-      }
+        startDates: action.payload.startDate, // Cambiado de startDates a startDate
+      };
 
-      case "set_endDate":
-      const { endDates } = action.payload
-
+    case "set_endDate":
+      // Almacena la cadena de fecha real de fin
       return {
         ...store,
-        endDates: endDates
-      }
+        endDates: action.payload.endDate, // Cambiado de endDates a endDate
+      };
 
     default:
       throw new Error("Unknown action " + action.type);

@@ -1,7 +1,7 @@
-import { use } from 'react';
+import React, { useEffect, useState } from 'react';
 import useGlobalReducer from "../hooks/useGlobalReducer";
-import { useParams, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function MakeReservation() {
@@ -14,19 +14,21 @@ export default function MakeReservation() {
         startDate: "",
         endDate: "",
         licenseNumber: "",
-        price: 0
+        price: ""
     });
 
     useEffect(() => {
-        if (store.favorites.length > 0) {
+        // Asegúrate de que store.favorites tenga un coche y que las fechas estén disponibles
+        if (store.favorites.length > 0 && store.startDates && store.endDates) {
             const car = store.favorites[0];
 
-            const startDate = store.startDates[0];
-            const endDate = store.endDates[0];
+            const startDate = store.startDates; // Accede directamente a la cadena de fecha
+            const endDate = store.endDates;     // Accede directamente a la cadena de fecha
 
             const date1 = new Date(startDate);
             const date2 = new Date(endDate);
             const diffTime = Math.abs(date2 - date1);
+            // Asegúrate de que diffDays sea al menos 1, incluso para reservas del mismo día
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
 
             setReservationData({
@@ -38,7 +40,7 @@ export default function MakeReservation() {
                 price: car.amount * diffDays
             });
         }
-    }, [store]);
+    }, [store.favorites, store.startDates, store.endDates]); // Añade dependencias a useEffect
 
     const handleChange = (e) => {
         setReservationData({
@@ -51,7 +53,7 @@ export default function MakeReservation() {
         e.preventDefault();
 
         const car = store.favorites[0];
-        const token = localStorage.getItem("token"); 
+        const token = localStorage.getItem("token");
 
         if (!token) {
             alert("Debes iniciar sesión para hacer una reserva.");
@@ -60,7 +62,7 @@ export default function MakeReservation() {
 
         const bookingPayload = {
             car_id: car.license_plate,
-            location: "Online", 
+            location: "Online",
             car_model: reservationData.model,
             amount: reservationData.price,
             start_day: reservationData.startDate,
@@ -106,11 +108,11 @@ export default function MakeReservation() {
             </div>
             <div className="col-md-6">
                 <label className="form-label">Start Day</label>
-                <input type="text" className="form-control" value={reservationData.startDate} readOnly />
+                <input type="date" className="form-control" value={reservationData.startDate} readOnly />
             </div>
             <div className="col-md-6">
                 <label className="form-label">End Day</label>
-                <input type="text" className="form-control" value={reservationData.endDate} readOnly />
+                <input type="date" className="form-control" value={reservationData.endDate} readOnly />
             </div>
             <div className="col-md-9">
                 <label className="form-label">License Number</label>
