@@ -235,8 +235,6 @@ def get_reservation(id):
         return jsonify({'msg': 'No reservation listed'}), 404
     print(user_id)
     print(reservation.user_id)
-    # if user_id != reservation.user_id:
-    #     return jsonify({'msg': 'No authorized to see reservation'}), 403
 
     return jsonify(reservation.serialize()), 200
 
@@ -249,9 +247,6 @@ def edit_reservation(id):
     reservation = Booking.query.get(id)
     if not reservation:
         return jsonify({'msg': 'No reservation listed'}), 404
-
-    # if user_id != reservation.user_id:
-    #     return jsonify({'msg': 'No authorized to edit reservation'}), 403
 
     if not data:
         return jsonify({'msg': 'No data was edited'}), 400
@@ -294,9 +289,7 @@ def delete_reservation(id):
 
     if not reservation:
         return jsonify({'msg': 'No reservation listed'}), 404
-
-    # if user_id != reservation.user_id:
-    #     return jsonify({'msg': 'No authorized to delete reservation'}), 403
+    
     db.session.delete(reservation)
     db.session.commit()
 
