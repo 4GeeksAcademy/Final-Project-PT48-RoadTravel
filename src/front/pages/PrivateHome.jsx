@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react"; // Importar useState y useCallback
+import React, { useEffect, useState, useCallback } from "react"; 
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import CardSubcompactCar from "../components/CardSubcompactCar.jsx";
 import CardMediumCar from "../components/CardMediumCar.jsx";
@@ -61,25 +61,25 @@ export default function PrivateHome() {
     console.log("Estado global (store) actualizado:", store);
     console.log("filterStartDate en store:", store.startDates);
     console.log("filterEndDate en store:", store.endDates);
-  }, [store]); // Se ejecutará cada vez que el objeto store cambie
+  }, [store]); 
 
 
   const handleApplyFilters = () => {
-    // Despacha los valores reales de startDate y endDate al store
+   
     dispatch({
       type: "set_startDate",
       payload: {
-        startDate: startDate, // Pasa el valor real del estado
+        startDate: startDate, 
       },
     });
     dispatch({
       type: "set_endDate",
       payload: {
-        endDate: endDate, // Pasa el valor real del estado
+        endDate: endDate, 
       },
     });
 
-    console.log("Aplicando filtros con:", startDate, endDate); // Loggea los valores actuales del estado
+    console.log("Aplicando filtros con:", startDate, endDate); 
     fetchCars("subcompact", startDate, endDate);
     fetchCars("medium", startDate, endDate);
     fetchCars("premium", startDate, endDate);

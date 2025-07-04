@@ -18,17 +18,17 @@ export default function MakeReservation() {
     });
 
     useEffect(() => {
-        // Asegúrate de que store.favorites tenga un coche y que las fechas estén disponibles
+   
         if (store.favorites.length > 0 && store.startDates && store.endDates) {
             const car = store.favorites[0];
 
-            const startDate = store.startDates; // Accede directamente a la cadena de fecha
-            const endDate = store.endDates;     // Accede directamente a la cadena de fecha
+            const startDate = store.startDates;
+            const endDate = store.endDates;
 
             const date1 = new Date(startDate);
             const date2 = new Date(endDate);
             const diffTime = Math.abs(date2 - date1);
-            // Asegúrate de que diffDays sea al menos 1, incluso para reservas del mismo día
+
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
 
             setReservationData({
@@ -40,7 +40,7 @@ export default function MakeReservation() {
                 price: car.amount * diffDays
             });
         }
-    }, [store.favorites, store.startDates, store.endDates]); // Añade dependencias a useEffect
+    }, [store.favorites, store.startDates, store.endDates]);
 
     const handleChange = (e) => {
         setReservationData({

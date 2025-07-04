@@ -3,8 +3,8 @@ export const initialStore = () => ({
   medium: [],
   premium: [],
   favorites: [],
-  startDates: null, // Cambia a null o una cadena vacía para una sola fecha
-  endDates: null,   // Cambia a null o una cadena vacía para una sola fecha
+  startDates: null, 
+  endDates: null,
 });
 
 export default function storeReducer(store, action = {}) {
@@ -27,17 +27,17 @@ export default function storeReducer(store, action = {}) {
       };
 
     case "set_startDate":
-      // Almacena la cadena de fecha real de inicio
+
       return {
         ...store,
-        startDates: action.payload.startDate, // Cambiado de startDates a startDate
+        startDates: action.payload.startDate, 
       };
 
     case "set_endDate":
-      // Almacena la cadena de fecha real de fin
+
       return {
         ...store,
-        endDates: action.payload.endDate, // Cambiado de endDates a endDate
+        endDates: action.payload.endDate,
       };
 
     default:

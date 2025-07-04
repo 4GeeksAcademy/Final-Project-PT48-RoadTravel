@@ -10,11 +10,6 @@ const backendUrl = import.meta.env.VITE_BACKEND_URL;
 export default function Home() {
   const navigate = useNavigate()
 
-
-
-
-  // validaciones
-
   return (
     
     
