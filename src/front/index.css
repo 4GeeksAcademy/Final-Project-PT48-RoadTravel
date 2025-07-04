@@ -32,3 +32,8 @@ body {
 .nav-bar{
   background-color: orangered;
 }
+
+.imgsize{
+  width: 314px;
+  height: 245px;
+}

@@ -2,7 +2,13 @@ import { Link } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
 export const Navbar = () => {
-	const { store, dispatch } = useGlobalReducer()
+  const { store, dispatch } = useGlobalReducer()
+  const isAuthenticated = store?.isAuthenticated;
+
+  const handleLogout = () => {
+    dispatch({ type: "logout" });
+    navigate("/login");
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-light nav-bar">
       <div className="container ">
@@ -11,12 +17,16 @@ export const Navbar = () => {
         </Link>
 
         <div className="ml-auto d-flex gap-2">
-          <Link to="/signup">
-            <button className="btn btn-primary">Sign Up</button>
-          </Link>
-          <Link to="/login">
-            <button className="btn btn-success">Login</button>
-          </Link>
+          {!isAuthenticated && (
+            <>
+              <Link to="/signup">
+                <button className="btn btn-primary">Sign Up</button>
+              </Link>
+              <Link to="/login">
+                <button className="btn btn-success">Login</button>
+              </Link>
+            </>
+          )}
           {/* <Link to="/admin">
             <button className="btn btn-outline-warning">Admin</button>
           </Link> */}

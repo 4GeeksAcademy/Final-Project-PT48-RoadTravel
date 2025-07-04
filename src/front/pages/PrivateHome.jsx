@@ -17,7 +17,7 @@ export default function PrivateHome() {
 
   const fetchCars = useCallback(async (category, start = "", end = "") => {
     try {
-      const token = sessionStorage.getItem("token");
+      const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
 

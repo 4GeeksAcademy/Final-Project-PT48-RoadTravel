@@ -49,7 +49,7 @@ export function SignUp() {
 
                 // *** Paso Clave 2: Redirigir según el rol ***
                 if (userRole === "client") { 
-                    navigate("/privateHome"); 
+                    navigate("/"); 
                 } 
                 else {
                     // Si el rol no es "client", o si no se recibe un rol claro,
