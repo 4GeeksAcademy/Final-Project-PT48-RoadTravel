@@ -41,17 +41,17 @@ export default function AdminDashboard() {
   };
 
   const handleFormChange = (e) => {
-  const { name, value, type, checked } = e.target;
+    const { name, value, type, checked } = e.target;
 
-  setFormData({
-    ...formData,
-    [name]: 
-      type === "checkbox"
-      ? checked
-      : (name === "price" || name === "pieces"
-         ? parseInt(value) || 0
-         : value)
-  });
+    setFormData({
+      ...formData,
+      [name]:
+        type === "checkbox"
+          ? checked
+          : (name === "price" || name === "pieces"
+            ? parseInt(value) || 0
+            : value)
+    });
   };
 
   const fetchSpecs = async () => {
@@ -95,170 +95,199 @@ export default function AdminDashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+
+    const token = localStorage.getItem("token");
+    if (!token || token.split('.').length !== 3) {
+      alert("Invalid session. Please log in again..");
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      navigate("/login");
+      return;
+    }
+
+
     const payload = {
-      ...stepOne,
-      ...formData,
-      ...specs
+      license_plate: formData.license_plate,
+      name: formData.name,
+      make: stepOne.make,
+      model: stepOne.model,
+      year: parseInt(stepOne.year),
+      color: formData.color,
+      serial_number: formData.serial_number,
+      pieces: parseInt(formData.pieces),
+      type: formData.type,
+      status: formData.status,
+      image_url: formData.image_url,
+      fuel_type: specs.fuel_type || null,
+      transmission: specs.transmission || null,
+      cylinders: specs.cylinders || null,
+      displacement: specs.displacement || null,
+      drive: specs.drive || null
     };
 
     try {
-      const res = await fetch(backendUrl+"/api/cars/import", {
+      const res = await fetch(`${backendUrl}/api/cars/import`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(payload)
       });
 
-      let json;
-      try {
-        json = await res.json();
-      } catch (err) {
-        alert("Unexpected server response");
-        return;
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        console.error("Error response:", errorData);
+        throw new Error(errorData.msg || `Error HTTP: ${res.status}`);
       }
 
-      if (res.ok) {
-        alert("Car successfully added");
-        navigate("/");
+
+      const responseData = await res.json();
+      alert("Vehicle added successfully!");
+      navigate("/admin");
+
+    } catch (error) {
+
+
+      if (error.message.includes("token") || error.message.includes("segments")) {
+        sessionStorage.removeItem("token");
+        alert("Session expired or invalid. Please log in again..");
+        navigate("/login");
       } else {
-        alert(json.msg || "Error occurred while adding car");
+        alert(`Error: ${error.message || "Error processing request"}`);
       }
-    } catch (err) {
-      console.error(err);
-      alert("Request failed");
     }
   };
 
   return (
     <div>
-      <NavbarForUsers inicial="admin" booking="bookinglist"/>
-    <div className="container my-5">
-      <h2>Admin Dashboard – Add Car</h2>
+      <NavbarForUsers inicial="admin" booking="bookinglist" />
+      <div className="container my-5">
+        <h2>Admin Dashboard – Add Car</h2>
 
-      <div className="card p-3 mb-4">
-        <h4>Step 1 – Fetch Car Specs</h4>
-        <div className="row g-3">
-          {["make", "model", "year"].map((field) => (
-            <div className="col-md-4" key={field}>
-              <label className="form-label">{field.toUpperCase()}</label>
+        <div className="card p-3 mb-4">
+          <h4>Step 1 – Fetch Car Specs</h4>
+          <div className="row g-3">
+            {["make", "model", "year"].map((field) => (
+              <div className="col-md-4" key={field}>
+                <label className="form-label">{field.toUpperCase()}</label>
+                <input
+                  type={field === "year" ? "number" : "text"}
+                  className="form-control"
+                  name={field}
+                  value={stepOne[field]}
+                  onChange={handleStepOneChange}
+                  required
+                />
+              </div>
+            ))}
+          </div>
+          <button
+            className="btn btn-secondary mt-3"
+            type="button"
+            onClick={fetchSpecs}
+          >
+            Fetch Car Specs
+          </button>
+
+          {specs.fuel_type && (
+            <div className="mt-4">
+              <h5>Fetched Specs:</h5>
+              <ul>
+                {Object.entries(specs).map(([key, val]) => (
+                  <li key={key}>
+                    <strong>{key.replace("_", " ")}:</strong> {val}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        <form className="card p-3" onSubmit={handleSubmit}>
+          <h4>Step 2 – Admin Info</h4>
+
+          {[
+            { name: "license_plate", label: "License Plate" },
+            { name: "name", label: "Name" },
+            { name: "color", label: "Color" },
+            { name: "serial_number", label: "Serial Number" },
+            { name: "pieces", label: "Number of Pieces", type: "number" },
+            { name: "price", label: "Price (USD)", type: "number" },
+            { name: "image_url", label: "Image URL", type: "url" }
+          ].map(({ name, label, type }) => (
+            <div className="mb-3" key={name}>
+              <label className="form-label">{label}</label>
               <input
-                type={field === "year" ? "number" : "text"}
+                type={type || "text"}
                 className="form-control"
-                name={field}
-                value={stepOne[field]}
-                onChange={handleStepOneChange}
+                name={name}
+                value={formData[name]}
+                onChange={handleFormChange}
                 required
               />
             </div>
           ))}
-        </div>
-        <button
-          className="btn btn-secondary mt-3"
-          type="button"
-          onClick={fetchSpecs}
-        >
-          Fetch Car Specs
-        </button>
 
-        {specs.fuel_type && (
-          <div className="mt-4">
-            <h5>Fetched Specs:</h5>
-            <ul>
-              {Object.entries(specs).map(([key, val]) => (
-                <li key={key}>
-                  <strong>{key.replace("_", " ")}:</strong> {val}
-                </li>
-              ))}
-            </ul>
+          <div className="mb-3">
+            <label className="form-label">Category</label>
+            <select
+              className="form-select"
+              name="type"
+              value={formData.type}
+              onChange={handleFormChange}
+            >
+              <option value="subcompact">Subcompact</option>
+              <option value="medium">Medium</option>
+              <option value="premium">Premium</option>
+            </select>
           </div>
-        )}
-      </div>
 
-      <form className="card p-3" onSubmit={handleSubmit}>
-        <h4>Step 2 – Admin Info</h4>
+          <div className="mb-3">
+            <label className="form-label">Status</label>
+            <select
+              className="form-select"
+              name="status"
+              value={formData.status}
+              onChange={handleFormChange}
+            >
+              <option value="available">Available</option>
+              <option value="rent">Rented</option>
+            </select>
+          </div>
 
-        {[
-          { name: "license_plate", label: "License Plate" },
-          { name: "name", label: "Name" },
-          { name: "color", label: "Color" },
-          { name: "serial_number", label: "Serial Number" },
-          { name: "pieces", label: "Number of Pieces", type: "number" },
-          { name: "price", label: "Price (USD)", type: "number" },
-          { name: "image_url", label: "Image URL", type: "url" }
-        ].map(({ name, label, type }) => (
-          <div className="mb-3" key={name}>
-            <label className="form-label">{label}</label>
+          <div className="mb-3">
+            <label className="form-label">Created At</label>
             <input
-              type={type || "text"}
+              type="datetime-local"
+              name="created_at"
               className="form-control"
-              name={name}
-              value={formData[name]}
+              value={formData.created_at}
               onChange={handleFormChange}
               required
             />
           </div>
-        ))}
 
-        <div className="mb-3">
-          <label className="form-label">Category</label>
-          <select
-            className="form-select"
-            name="type"
-            value={formData.type}
-            onChange={handleFormChange}
-          >
-            <option value="subcompact">Subcompact</option>
-            <option value="medium">Medium</option>
-            <option value="premium">Premium</option>
-          </select>
-        </div>
+          <div className="form-check mb-4">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              name="is_active"
+              checked={formData.is_active}
+              onChange={handleFormChange}
+              id="isActive"
+            />
+            <label className="form-check-label" htmlFor="isActive">
+              Is Active
+            </label>
+          </div>
 
-        <div className="mb-3">
-          <label className="form-label">Status</label>
-          <select
-            className="form-select"
-            name="status"
-            value={formData.status}
-            onChange={handleFormChange}
-          >
-            <option value="available">Available</option>
-            <option value="rent">Rented</option>
-          </select>
-        </div>
-
-        <div className="mb-3">
-          <label className="form-label">Created At</label>
-          <input
-            type="datetime-local"
-            name="created_at"
-            className="form-control"
-            value={formData.created_at}
-            onChange={handleFormChange}
-            required
-          />
-        </div>
-
-        <div className="form-check mb-4">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            name="is_active"
-            checked={formData.is_active}
-            onChange={handleFormChange}
-            id="isActive"
-          />
-          <label className="form-check-label" htmlFor="isActive">
-            Is Active
-          </label>
-        </div>
-
-        <button className="btn btn-primary" type="submit">
-          Save Car to Inventory
-        </button>
-      </form>
-    </div>
+          <button className="btn btn-primary" type="submit">
+            Save Car to Inventory
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

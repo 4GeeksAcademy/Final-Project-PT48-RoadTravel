@@ -70,7 +70,7 @@ export const initialStore = () => {
     user: user,
     isAuthenticated: !!token,
     startDates: [],
-    endDates: []
+    endDates: [],
   };
 };
 
@@ -83,33 +83,46 @@ export default function storeReducer(store, action = {}) {
       return { ...store, [action.category]: action.payload };
 
     case "newFavorite":
-      const exists = store.favorites.some(f => f.license_plate === action.payload.license_plate);
+      const exists = store.favorites.some(
+        (f) => f.license_plate === action.payload.license_plate
+      );
       if (exists) return store;
       return { ...store, favorites: [...store.favorites, action.payload] };
 
     case "removeFavorite":
       return {
         ...store,
-        favorites: store.favorites.filter(f => f.license_plate !== action.payload.license_plate)
+        favorites: store.favorites.filter(
+          (f) => f.license_plate !== action.payload.license_plate
+        ),
       };
 
     case "set_startDate":
-      const { startDates } = action.payload
+      const { startDates } = action.payload;
 
       return {
         ...store,
-        startDates: startDates
-      }
+        startDates: startDates,
+      };
 
     case "set_endDate":
-      const { endDates } = action.payload
+      const { endDates } = action.payload;
 
       return {
         ...store,
-        endDates: endDates
-      }
+        endDates: endDates,
+      };
 
     case "login_success":
+      // Verificar token antes de almacenar
+      if (
+        !action.payload.token ||
+        action.payload.token.split(".").length !== 3
+      ) {
+        console.error("Token JWT inválido recibido");
+        return store; // Mantener el estado actual sin cambios
+      }
+
       localStorage.setItem("token", action.payload.token);
       localStorage.setItem("user", JSON.stringify(action.payload.user));
       return {
@@ -132,4 +145,4 @@ export default function storeReducer(store, action = {}) {
     default:
       throw new Error("Unknown action " + action.type);
   }
-} 
+}

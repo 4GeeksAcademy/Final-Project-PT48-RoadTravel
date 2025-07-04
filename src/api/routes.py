@@ -165,7 +165,7 @@ def import_car():
         pieces=data['pieces'],
         price=get_price_for_type(data['type']),
         type=data['type'],
-        status=CarRole[data['status']],  # ← Aquí está la corrección clave
+        status=CarRole[data['status']],  
         image_url=data['image_url'],
         user_id=uid,
         fuel_type=data.get('fuel_type'),
