@@ -10,6 +10,8 @@ import DescriptionMediumCar from "./pages/DescriptionMediumCar.jsx";
 import DescriptionPremiumCar from "./pages/DescriptionPremiumCar.jsx";
 import MakeReservation from "./pages/MakeReservation.jsx"
 import Booking from "./pages/Booking.jsx"
+import MyReservations from './views/MyReservations.jsx';
+
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +57,10 @@ export const router = createBrowserRouter([
       {
         path: "bookinglist",
         element: <Booking />
+      },
+      {
+        path: "my-reservations",
+        element: <MyReservations />
       }
     ],
   },
