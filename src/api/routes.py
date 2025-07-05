@@ -189,6 +189,7 @@ def make_reservation():
     location = data.get('location')
     car_model = data.get('car_model')
     amount = data.get('amount')
+    license_number = data.get('license_number')
     start_day_str = data.get('start_day')
     end_day_str = data.get('end_day')
     start_day_obj = datetime.strptime(start_day_str, '%Y-%m-%d').date()
@@ -199,6 +200,7 @@ def make_reservation():
         location=location,
         car_model=car_model,
         amount=amount,
+        license_number = license_number,
         start_day=start_day_obj,
         end_day=end_day_obj
     )

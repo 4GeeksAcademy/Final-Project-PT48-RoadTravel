@@ -25,7 +25,7 @@ export default function Home() {
           <h1 className="display-4 title-jumbotrone">Welcome to RoadTravel!</h1>
           <p className="lead">Take control of your journey</p>
           <hr className="my-4" />
-          <button onClick={() => navigate("/signup")} className="btn btn-primary btn-lg" href="#" role="button">Let's start</button>
+          <button onClick={() => navigate("/signup")} className="btn signup btn-lg" href="#" role="button">Let's start</button>
 
         </div>
 

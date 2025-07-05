@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer";
+import { NavbarForUsers } from '../components/NavbarForUsers';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -13,7 +14,7 @@ export default function MyReservations() {
 
     const fetchReservations = async () => {
         try {
-            const res = await fetch(`${backendUrl}/my-reservations`, {
+            const res = await fetch(`${backendUrl}/api/my-reservations`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -29,14 +30,15 @@ export default function MyReservations() {
     const deleteReservation = async (id) => {
         if (!window.confirm("Are you sure you want to delete this reservation?")) return;
         try {
-            const res = await fetch(`${backendUrl}/my-reservation/${id}`, {
+            const res = await fetch(`${backendUrl}/api/my-reservation/${id}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
             if (!res.ok) throw new Error("Failed to delete reservation");
-            fetchReservations();
+            
+            setReservations(reservations.filter(item => item.id != id));
         } catch (err) {
             console.error("Delete error:", err.message);
         }
@@ -44,7 +46,7 @@ export default function MyReservations() {
 
     const updateReservation = async (id) => {
         try {
-            const res = await fetch(`${backendUrl}/my-reservation/${id}`, {
+            const res = await fetch(`${backendUrl}/api/my-reservation/${id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -67,7 +69,9 @@ export default function MyReservations() {
     }, []);
 
     return (
-        <div className="container my-5">
+        <div>
+        <NavbarForUsers inicial="privatehome" booking="my-reservations" />
+        <div className="container my-5 signup-form">
             <h2 className="mb-4">My Reservations</h2>
             {reservations.length === 0 ? (
                 <p>You have no reservations.</p>
@@ -114,6 +118,7 @@ export default function MyReservations() {
                     ))}
                 </div>
             )}
+        </div>
         </div>
     );
 }

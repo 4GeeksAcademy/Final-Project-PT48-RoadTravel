@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import useGlobalReducer from "../hooks/useGlobalReducer";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { NavbarForUsers } from '../components/NavbarForUsers';
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export default function MakeReservation() {
     // const fav = store.favorites.some(f => f.license_plate === vehicle.license_plate);
     const { store } = useGlobalReducer();
+    const {id, type} = useParams();
     const navigate = useNavigate();
     const [reservationData, setReservationData] = useState({
         model: "",
@@ -18,8 +19,10 @@ export default function MakeReservation() {
     });
     useEffect(() => {
         // Asegúrate de que store.favorites tenga un coche y que las fechas estén disponibles
-        if (store.favorites.length > 0 && store.startDates && store.endDates) {
-            const car = store.favorites[0];
+        if (store[type].length > 0 && store.startDates && store.endDates) {
+            const car = store[type].find(item => item.license_plate == id);
+            console.log(car);
+            
             const startDate = store.startDates; // Accede directamente a la cadena de fecha
             const endDate = store.endDates;     // Accede directamente a la cadena de fecha
             const date1 = new Date(startDate);
@@ -33,10 +36,14 @@ export default function MakeReservation() {
                 startDate: startDate,
                 endDate: endDate,
                 licenseNumber: '',
-                price: car.amount * diffDays
+                price: car.price * diffDays
             });
+            console.log(car.amount);
+            
         }
-    }, [store.favorites, store.startDates, store.endDates]); // Añade dependencias a useEffect
+    }, [store.subcompact, store.premium, store.medium, store.startDates, store.endDates]); // Añade dependencias a useEffect
+    console.log(reservationData);
+    
     const handleChange = (e) => {
         setReservationData({
             ...reservationData,
@@ -45,14 +52,15 @@ export default function MakeReservation() {
     };
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const car = store.favorites[0];
         const token = localStorage.getItem("token");
         if (!token) {
             alert("Debes iniciar sesión para hacer una reserva.");
             return;
         }
+        console.log(reservationData);
+        
         const bookingPayload = {
-            car_id: car.license_plate,
+            car_id: id,
             location: "Online",
             car_model: reservationData.model,
             amount: reservationData.price,
@@ -75,7 +83,7 @@ export default function MakeReservation() {
             }
             const data = await res.json();
             const reservationId = data.new_booking.id;
-            navigate(`/thanks/${reservationId}`);
+            navigate(`/my-reservations`);
         } catch (err) {
             console.error("Error:", err);
             alert(err.message || "Error al confirmar la reserva.");
@@ -84,8 +92,9 @@ export default function MakeReservation() {
     return (
         <div>
            
-            <NavbarForUsers inicial="privatehome" booking="place-reservation" />
-        <form onSubmit={handleSubmit} className="row g-3 d-flex justify-content-center align-items-center my-4">
+            <NavbarForUsers inicial="privatehome" booking="my-reservations" />
+             <div className="d-flex justify-content-center align-items-center my-4 signup-form">
+        <form  onSubmit={handleSubmit} className="row g-3 d-flex justify-content-center align-items-center my-4 container card no-direction">
             <div className="col-md-9">
                 <label className="form-label">Car Model</label>
                 <input type="text" className="form-control" value={reservationData.model} readOnly />
@@ -118,9 +127,10 @@ export default function MakeReservation() {
                 <input type="text" className="form-control" value={`$${reservationData.price}`} readOnly />
             </div>
             <div className="col-12 mb-2 d-flex justify-content-center">
-                <button type="submit" className="btn btn-primary">Confirm</button>
+                <button type="submit" className="btn signup">Confirm</button>
             </div>
         </form>
+        </div>
         </div>
     );
 };

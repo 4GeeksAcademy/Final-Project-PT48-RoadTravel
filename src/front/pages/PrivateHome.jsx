@@ -64,7 +64,8 @@ export default function PrivateHome() {
   }, [store]); // Se ejecutará cada vez que el objeto store cambie
 
 
-  const handleApplyFilters = () => {
+  const handleApplyFilters = (e) => {
+    e.preventDefault()
     // Despacha los valores reales de startDate y endDate al store
     dispatch({
       type: "set_startDate",
@@ -93,6 +94,7 @@ export default function PrivateHome() {
 
       <div className="card p-4 mb-4 shadow-sm">
         <h4 className="mb-3">Choose your dates</h4>
+        <form onSubmit={handleApplyFilters}>
         <div className="row g-3 align-items-end">
           <div className="col-md-5">
             <label htmlFor="startDate" className="form-label">Start Date:</label>
@@ -101,7 +103,8 @@ export default function PrivateHome() {
               className="form-control" 
               id="startDate" 
               value={startDate} 
-              onChange={(e) => setStartDate(e.target.value) } 
+              onChange={(e) => setStartDate(e.target.value) }
+              required 
             />
           </div>
           <div className="col-md-5">
@@ -112,14 +115,16 @@ export default function PrivateHome() {
               id="endDate" 
               value={endDate} 
               onChange={(e) => setEndDate(e.target.value)} 
+              required
             />
           </div>
           <div className="col-md-2 ">
-            <button className="btn signup w-100" onClick={handleApplyFilters }>
-              Apply
-            </button>
+            <input className="btn signup w-100" type="submit" value={"Apply"}/>
+              
+            
           </div>
         </div>
+        </form>
         {(startDate || endDate) && (
           <div className="mt-3 text-end">
             <button className="btn btn-link btn-sm" onClick={() => { setStartDate(""); setEndDate(""); handleApplyFilters(); }}>

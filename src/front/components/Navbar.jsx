@@ -12,7 +12,7 @@ export const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg  nav-bar">
       <div className="container-fluid">
-      <Link className="navbar-brand nav-link" to="/">
+      <Link className="navbar-brand text-white nav-link" to="/">
           Road Travel Rent-a-Car
         </Link>
       <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">

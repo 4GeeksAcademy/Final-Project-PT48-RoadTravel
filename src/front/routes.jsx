@@ -50,7 +50,7 @@ export const router = createBrowserRouter([
         element: <DescriptionPremiumCar />,
       },
       {
-        path: "place-reservation",
+        path: "place-reservation/:type/:id",
         element: <MakeReservation />
       },
       {

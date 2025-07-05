@@ -61,3 +61,7 @@ body {
 .signup-form{
   height: 750px;
 }
+
+.no-direction{
+  flex-direction: row;
+}
