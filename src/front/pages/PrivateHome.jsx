@@ -65,24 +65,21 @@ export default function PrivateHome() {
 
 
   const handleApplyFilters = () => {
-
-     dispatch({
+    // Despacha los valores reales de startDate y endDate al store
+    dispatch({
       type: "set_startDate",
       payload: {
-        startDates: setStartDate,
+        startDate: startDate, // Pasa el valor real del estado
       },
     });
-
-     dispatch({
+    dispatch({
       type: "set_endDate",
       payload: {
-        endDates: setEndDate,
+        endDate: endDate, // Pasa el valor real del estado
       },
     });
 
-    console.log(store.startDates);
-    
-   
+    console.log("Aplicando filtros con:", startDate, endDate); // Loggea los valores actuales del estado
     fetchCars("subcompact", startDate, endDate);
     fetchCars("medium", startDate, endDate);
     fetchCars("premium", startDate, endDate);
@@ -90,7 +87,7 @@ export default function PrivateHome() {
 
   return (
     <div>
-      <NavbarForUsers inicial="privatehome" booking="place-reservation" />
+      <NavbarForUsers inicial="privatehome" booking="my-reservations" />
       <div className="container my-4">
       <h1 className="mb-4 text-center">Vehicle Catalog</h1>
 
@@ -117,9 +114,9 @@ export default function PrivateHome() {
               onChange={(e) => setEndDate(e.target.value)} 
             />
           </div>
-          <div className="col-md-2">
-            <button className="btn btn-primary w-100" onClick={handleApplyFilters }>
-              Apply Filter
+          <div className="col-md-2 ">
+            <button className="btn signup w-100" onClick={handleApplyFilters }>
+              Apply
             </button>
           </div>
         </div>

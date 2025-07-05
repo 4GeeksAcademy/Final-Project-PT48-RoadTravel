@@ -95,6 +95,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import { Navbar } from '../components/Navbar';
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -160,30 +161,37 @@ const handleLogin = async (e) => {
 };
 
   return (
-    <form onSubmit={handleLogin}>
-      <div>
-        <label>Email:</label>
-        <input
+    <div>
+    <Navbar/>
+            <div className="d-flex justify-content-center align-items-center my-4 signup-form">
+    <form className="container card row" style={{ width: "100%", maxWidth: "800px" }} onSubmit={handleLogin}>
+      <div className=" mt-2 col-12">
+        <label className="form-label">Email:</label>
+        <input className="form-control"
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
       </div>
-      <div>
-        <label>Password:</label>
-        <input
+      <div className=" mt-2 col-12">
+        <label className="form-label">Password:</label>
+        <input className="form-control"
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
         />
       </div>
-      <button type="submit">Login</button>
+      <div className="col-12 my-2 d-flex justify-content-center">
+      <button  className="btn signup " type="submit">Login</button>
       {loginFailed && (
         <p style={{ color: "red" }}>Login failed. Please try again.</p>
       )}
+      </div>
     </form>
+    </div>
+</div>
   );
 };
 

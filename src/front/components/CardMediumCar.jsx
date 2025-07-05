@@ -18,10 +18,16 @@ const CardMediumCar = ({ vehicle }) => {
           <li>Pieces: {vehicle.pieces}</li>
           <li>Price: ${vehicle.price}/day</li>
         </ul>
-        <button onClick={()=>nav(`/medium/${vehicle.license_plate}`)}>Details</button>
-        <button onClick={() => dispatch({ type: fav ? "removeFavorite" : "newFavorite", payload: vehicle })}>
-          {fav ? "★" : "☆"}
+        <div className="container text-center">
+        <button className="btn btn-success"
+          onClick={() => {
+            dispatch({ type: fav ? "removeFavorite" : "newFavorite", payload: vehicle });
+            nav('/place-reservation');
+          }}
+        >
+          Booking
         </button>
+        </div>
       </div>
     </div>
   );

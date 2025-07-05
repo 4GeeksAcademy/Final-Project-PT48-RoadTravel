@@ -15,7 +15,7 @@ export const NavbarForUsers = (prop) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light nav-bar">
       <div className="container ">
-        <Link className="navbar-brand" to={`/${prop.inicial}`}>
+        <Link className="navbar-brand text-white" to={`/${prop.inicial}`}>
           Road Travel Rent-a-Car
         </Link>
 
