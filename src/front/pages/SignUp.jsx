@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom"; // Link es para navegar con tags <Link>, no para redireccionar programáticamente. Está bien si lo usas en otras partes.
+import { Navbar } from '../components/Navbar';
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
 export function SignUp() {
@@ -19,7 +20,7 @@ export function SignUp() {
             [name]: value
         });
     };
-    
+
     const navigate = useNavigate(); // Inicializa useNavigate
 
     const handleSubmit = async (e) => {
@@ -41,24 +42,24 @@ export function SignUp() {
                 // ASUMO que tu backend devuelve un objeto user con el rol, por ejemplo:
                 // { message: "Successful registration!", user: { id: 1, email: "...", role: "client" } }
                 // O directamente { role: "client" }
-                
+
                 // *** Paso Clave 1: Acceder al rol del usuario en la respuesta ***
                 // Es muy importante que tu backend realmente devuelva 'data.user.role' o 'data.role'
-                const userRole = data.user ? data.user.role : null; 
+                const userRole = data.user ? data.user.role : null;
                 console.log("Rol del usuario recibido:", userRole); // Para depuración
 
                 // *** Paso Clave 2: Redirigir según el rol ***
-                if (userRole === "client") { 
-                    navigate("/privateHome"); 
-                } 
+                if (userRole === "client") {
+                    navigate("/");
+                }
                 else {
                     // Si el rol no es "client", o si no se recibe un rol claro,
                     // puedes redirigir a una página predeterminada (ej. inicio o un dashboard general).
-                    navigate("/"); 
+                    navigate("/");
                 }
 
             } else {
-                alert(data.message || "¡Error en el registro! Inténtalo de nuevo."); 
+                alert(data.message || "¡Error en el registro! Inténtalo de nuevo.");
             }
         } catch (err) {
             console.error("Error del servidor al registrar:", err); // Mensaje más específico
@@ -67,7 +68,9 @@ export function SignUp() {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center my-4">
+        <div>
+            <Navbar/>
+        <div className="d-flex justify-content-center align-items-center my-4 signup-form">
             {/* Aplica onSubmit al formulario */}
             <form className="container card" style={{ width: "100%", maxWidth: "800px" }} onSubmit={handleSubmit}>
                 <div className="row mt-2">
@@ -85,22 +88,23 @@ export function SignUp() {
                     <label htmlFor="inputFullName" className="form-label">Full Name</label>
                     <input type="text" name="name" value={formData.name} onChange={handleChange} className="form-control" id="inputFullName" placeholder="Full Name" />
                 </div>
-                <div className="col-12">
+                <div className='row'>
+                <div className="col-6">
                     <label htmlFor="inputAddress" className="form-label">Address</label>
                     <input type="text" name="address" value={formData.address} onChange={handleChange} className="form-control" id="inputAddress" placeholder="123 Main ST" />
                 </div>
-                <div className="row">
-                    <div className="col-6">
-                        <label htmlFor="inputPhone" className="form-label">Phone</label>
-                        <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="form-control" id="inputPhone" /> {/* Cambiado a type="tel" para teléfonos */}
-                    </div>
+                <div className="col-6">
+                    <label htmlFor="inputPhone" className="form-label">Phone</label>
+                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} className="form-control" id="inputPhone" /> {/* Cambiado a type="tel" para teléfonos */}
                 </div>
-                
-                <div className="col-12 mb-2 d-flex justify-content-center">
+                </div>
+
+                <div className="col-12 my-2 d-flex justify-content-center">
                     {/* Quita el onClick de aquí, el onSubmit del form ya lo manejará */}
-                    <button type="submit" className="btn btn-primary">Sign up</button>
+                    <button type="submit" className="btn signup ">Sign up</button>
                 </div>
             </form>
+        </div>
         </div>
     );
 };

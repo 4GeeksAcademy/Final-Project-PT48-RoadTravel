@@ -9,6 +9,7 @@ import DescriptionSubcompactCar from "./pages/DescriptionSubcompactCar.jsx";
 import DescriptionMediumCar from "./pages/DescriptionMediumCar.jsx";
 import DescriptionPremiumCar from "./pages/DescriptionPremiumCar.jsx";
 import MakeReservation from "./pages/MakeReservation.jsx"
+import MyReservations from './pages/MyReservations.jsx';
 import Booking from "./pages/Booking.jsx"
 
 export const router = createBrowserRouter([
@@ -49,13 +50,18 @@ export const router = createBrowserRouter([
         element: <DescriptionPremiumCar />,
       },
       {
-        path: "place-reservation",
+        path: "place-reservation/:type/:id",
         element: <MakeReservation />
       },
       {
         path: "bookinglist",
         element: <Booking />
+      },
+      {
+        path: "my-reservations",
+        element: <MyReservations />
       }
+
     ],
   },
 ]);

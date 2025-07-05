@@ -12,16 +12,22 @@ const CardMediumCar = ({ vehicle }) => {
       <div className="card-body">
         <h5>{vehicle.make} {vehicle.model} {vehicle.year}</h5>
         <ul>
-          <li>Fuel: {vehicle.fuel_type}</li>
-          <li>Transmission: {vehicle.transmission}</li>
-          <li>Cylinders: {vehicle.cylinders}</li>
-          <li>Pieces: {vehicle.pieces}</li>
+          <li>License plate: {vehicle.license_plate}</li>
+          <li>Color: {vehicle.color}</li>
           <li>Price: ${vehicle.price}/day</li>
         </ul>
-        <button onClick={()=>nav(`/medium/${vehicle.license_plate}`)}>Details</button>
-        <button onClick={() => dispatch({ type: fav ? "removeFavorite" : "newFavorite", payload: vehicle })}>
-          {fav ? "★" : "☆"}
+        <div className="container text-center">
+          {store.startDates && store.endDates &&
+        <button className="btn btn-success"
+          onClick={() => {
+            dispatch({ type: fav ? "removeFavorite" : "newFavorite", payload: vehicle });
+            nav('/place-reservation/medium/'+ vehicle.license_plate);
+          }}
+        >
+          Booking
         </button>
+        }
+        </div>
       </div>
     </div>
   );

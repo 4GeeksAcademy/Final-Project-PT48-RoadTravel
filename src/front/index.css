@@ -2,6 +2,9 @@ body {
   /* background: linear-gradient(135deg, #333, #555); */
   background-color: whitesmoke;
   color: #000000;
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 .jumbotron {
@@ -30,5 +33,35 @@ body {
 
 
 .nav-bar{
-  background-color: orangered;
+  background-color: rgb(87, 16, 3);
+  color: white;
+}
+
+.imgsize{
+  width: 314px;
+  height: 245px;
+}
+
+.footer{
+  background-color: rgb(147 27 6);
+  color: white;
+  height: 60px;
+}
+
+.signup{
+  background-color:  rgb(129, 24, 6);
+  color: white;
+}
+
+.signup:hover{
+  background-color:  rgb(185, 34, 7);
+  color: white;
+}
+
+.signup-form{
+  height: 750px;
+}
+
+.no-direction{
+  flex-direction: row;
 }

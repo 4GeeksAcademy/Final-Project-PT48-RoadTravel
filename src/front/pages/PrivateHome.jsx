@@ -17,7 +17,7 @@ export default function PrivateHome() {
 
   const fetchCars = useCallback(async (category, start = "", end = "") => {
     try {
-      const token = sessionStorage.getItem("token");
+      const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
   
@@ -64,25 +64,23 @@ export default function PrivateHome() {
   }, [store]); // Se ejecutará cada vez que el objeto store cambie
 
 
-  const handleApplyFilters = () => {
-
-     dispatch({
+  const handleApplyFilters = (e) => {
+    e.preventDefault()
+    // Despacha los valores reales de startDate y endDate al store
+    dispatch({
       type: "set_startDate",
       payload: {
-        startDates: setStartDate,
+        startDate: startDate, // Pasa el valor real del estado
       },
     });
-
-     dispatch({
+    dispatch({
       type: "set_endDate",
       payload: {
-        endDates: setEndDate,
+        endDate: endDate, // Pasa el valor real del estado
       },
     });
 
-    console.log(store.startDates);
-    
-   
+    console.log("Aplicando filtros con:", startDate, endDate); // Loggea los valores actuales del estado
     fetchCars("subcompact", startDate, endDate);
     fetchCars("medium", startDate, endDate);
     fetchCars("premium", startDate, endDate);
@@ -90,12 +88,13 @@ export default function PrivateHome() {
 
   return (
     <div>
-      <NavbarForUsers inicial="privatehome" booking="place-reservation" />
+      <NavbarForUsers inicial="privatehome" booking="my-reservations" />
       <div className="container my-4">
       <h1 className="mb-4 text-center">Vehicle Catalog</h1>
 
       <div className="card p-4 mb-4 shadow-sm">
         <h4 className="mb-3">Choose your dates</h4>
+        <form onSubmit={handleApplyFilters}>
         <div className="row g-3 align-items-end">
           <div className="col-md-5">
             <label htmlFor="startDate" className="form-label">Start Date:</label>
@@ -104,7 +103,8 @@ export default function PrivateHome() {
               className="form-control" 
               id="startDate" 
               value={startDate} 
-              onChange={(e) => setStartDate(e.target.value) } 
+              onChange={(e) => setStartDate(e.target.value) }
+              required 
             />
           </div>
           <div className="col-md-5">
@@ -115,14 +115,16 @@ export default function PrivateHome() {
               id="endDate" 
               value={endDate} 
               onChange={(e) => setEndDate(e.target.value)} 
+              required
             />
           </div>
-          <div className="col-md-2">
-            <button className="btn btn-primary w-100" onClick={handleApplyFilters }>
-              Apply Filter
-            </button>
+          <div className="col-md-2 ">
+            <input className="btn signup w-100" type="submit" value={"Apply"}/>
+              
+            
           </div>
         </div>
+        </form>
         {(startDate || endDate) && (
           <div className="mt-3 text-end">
             <button className="btn btn-link btn-sm" onClick={() => { setStartDate(""); setEndDate(""); handleApplyFilters(); }}>
