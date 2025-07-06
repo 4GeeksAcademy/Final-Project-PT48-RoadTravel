@@ -8,7 +8,7 @@ const CardSubcompactCar = ({ vehicle }) => {
   const fav = store.favorites.some(f => f.license_plate === vehicle.license_plate);
   return (
     <div className="card m-2" style={{width: '240px'}}>
-      <img src={vehicle.image_url} style={{height:'140px',objectFit:'cover'}} alt={vehicle.name} /> {/* El admin debe subir la foto */}
+      <img src={vehicle.image_url} style={{height:'140px',objectFit:'cover'}} alt={vehicle.name} /> 
       <div className="card-body">
         <h5>{vehicle.make} {vehicle.model} {vehicle.year}</h5>
         <ul>

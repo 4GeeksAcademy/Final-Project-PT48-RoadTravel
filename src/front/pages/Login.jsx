@@ -125,9 +125,9 @@ const handleLogin = async (e) => {
 
     const data = await res.json();
     
-    // Verificación crítica del token
+
     if (!data.access_token || data.access_token.split('.').length !== 3) {
-      throw new Error("Token JWT inválido recibido del servidor");
+      throw new Error("Invalid JWT token received from server");
     }
 
     dispatch({
@@ -138,7 +138,7 @@ const handleLogin = async (e) => {
       }
     });
 
-    // Usar el mismo método de almacenamiento en toda la app (localStorage)
+   
     localStorage.setItem("token", data.access_token);
     localStorage.setItem("user", JSON.stringify(data.user));
 
@@ -146,15 +146,15 @@ const handleLogin = async (e) => {
     if (userRoles.includes("client")) {
       navigate("/privatehome");
     } else if (userRoles.includes("administrator")) {
-      navigate("/admin");
+      navigate("/privatehome");
     } else {
       navigate("/");
-      console.warn("Rol no manejado:", userRoles);
+      console.warn("Unidentified role:", userRoles);
     }
   } catch (err) {
-    console.error("Error en login:", err);
+    console.error("Login error:", err);
     setLoginFailed(true);
-    // Limpiar credenciales inválidas
+   
     localStorage.removeItem("token");
     localStorage.removeItem("user");
   }

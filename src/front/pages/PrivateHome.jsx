@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react"; // Importar useState y useCallback
+import React, { useEffect, useState, useCallback } from "react"; 
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import CardSubcompactCar from "../components/CardSubcompactCar.jsx";
 import CardMediumCar from "../components/CardMediumCar.jsx";
@@ -58,29 +58,29 @@ export default function PrivateHome() {
   }, [fetchCars]); 
 
   useEffect(() => {
-    console.log("Estado global (store) actualizado:", store);
+    console.log("Global state (store) updated:", store);
     console.log("filterStartDate en store:", store.startDates);
     console.log("filterEndDate en store:", store.endDates);
-  }, [store]); // Se ejecutará cada vez que el objeto store cambie
+  }, [store]); 
 
 
   const handleApplyFilters = (e) => {
     e.preventDefault()
-    // Despacha los valores reales de startDate y endDate al store
+    
     dispatch({
       type: "set_startDate",
       payload: {
-        startDate: startDate, // Pasa el valor real del estado
+        startDate: startDate, 
       },
     });
     dispatch({
       type: "set_endDate",
       payload: {
-        endDate: endDate, // Pasa el valor real del estado
+        endDate: endDate, 
       },
     });
 
-    console.log("Aplicando filtros con:", startDate, endDate); // Loggea los valores actuales del estado
+    console.log("Applying filters with:", startDate, endDate); 
     fetchCars("subcompact", startDate, endDate);
     fetchCars("medium", startDate, endDate);
     fetchCars("premium", startDate, endDate);
@@ -88,10 +88,10 @@ export default function PrivateHome() {
 
   return (
     <div>
-      <NavbarForUsers inicial="privatehome" booking="my-reservations" />
+      <NavbarForUsers index= "privatehome" booking="bookinglist" />
       <div className="container my-4">
       <h1 className="mb-4 text-center">Vehicle Catalog</h1>
-
+      {store.user?.role === "client" &&(
       <div className="card p-4 mb-4 shadow-sm">
         <h4 className="mb-3">Choose your dates</h4>
         <form onSubmit={handleApplyFilters}>
@@ -133,6 +133,7 @@ export default function PrivateHome() {
           </div>
         )}
       </div>
+      )}
 
       <h2>Subcompact Cars</h2>
       {store.subcompact.length === 0 ? <p>No cars available in this category for the selected dates.</p> :

@@ -92,77 +92,101 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
+  const token = localStorage.getItem("token");
+  if (!token || token.split('.').length !== 3) {
+    alert("Invalid session. Please log in again..");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+    return;
+  }
 
-    const token = localStorage.getItem("token");
-    if (!token || token.split('.').length !== 3) {
-      alert("Invalid session. Please log in again..");
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      navigate("/login");
-      return;
-    }
-
-
-    const payload = {
-      license_plate: formData.license_plate,
-      name: formData.name,
-      make: stepOne.make,
-      model: stepOne.model,
-      year: parseInt(stepOne.year),
-      color: formData.color,
-      serial_number: formData.serial_number,
-      pieces: parseInt(formData.pieces),
-      type: formData.type,
-      status: formData.status,
-      image_url: formData.image_url,
-      fuel_type: specs.fuel_type || null,
-      transmission: specs.transmission || null,
-      cylinders: specs.cylinders || null,
-      displacement: specs.displacement || null,
-      drive: specs.drive || null
-    };
-
-    try {
-      const res = await fetch(`${backendUrl}/api/cars/import`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-      });
-
-
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        console.error("Error response:", errorData);
-        throw new Error(errorData.msg || `Error HTTP: ${res.status}`);
-      }
-
-
-      const responseData = await res.json();
-      alert("Vehicle added successfully!");
-      navigate("/admin");
-
-    } catch (error) {
-
-
-      if (error.message.includes("token") || error.message.includes("segments")) {
-        sessionStorage.removeItem("token");
-        alert("Session expired or invalid. Please log in again..");
-        navigate("/login");
-      } else {
-        alert(`Error: ${error.message || "Error processing request"}`);
-      }
-    }
+  const payload = {
+    license_plate: formData.license_plate,
+    name: formData.name,
+    make: stepOne.make,
+    model: stepOne.model,
+    year: parseInt(stepOne.year),
+    color: formData.color,
+    serial_number: formData.serial_number,
+    pieces: parseInt(formData.pieces),
+    type: formData.type,
+    status: formData.status,
+    image_url: formData.image_url,
+    fuel_type: specs.fuel_type || null,
+    transmission: specs.transmission || null,
+    cylinders: specs.cylinders || null,
+    displacement: specs.displacement || null,
+    drive: specs.drive || null
   };
+
+  try {
+    const res = await fetch(`${backendUrl}/api/cars/import`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      console.error("Error response:", errorData);
+      throw new Error(errorData.msg || `Error HTTP: ${res.status}`);
+    }
+
+    const responseData = await res.json();
+    alert("Vehicle added successfully!");
+    
+  
+    setStepOne({
+      make: "",
+      model: "",
+      year: ""
+    });
+    
+    setSpecs({
+      fuel_type: "",
+      transmission: "",
+      cylinders: "",
+      displacement: "",
+      drive: ""
+    });
+    
+    setFormData({
+      license_plate: "",
+      name: "",
+      color: "",
+      type: "subcompact",
+      serial_number: "",
+      pieces: "",
+      price: "",
+      status: "available",
+      image_url: "",
+      is_active: true,
+      created_at: new Date().toISOString().slice(0, 16)
+    });
+    
+    navigate("/admin");
+
+  } catch (error) {
+    if (error.message.includes("token") || error.message.includes("segments")) {
+      sessionStorage.removeItem("token");
+      alert("Session expired or invalid. Please log in again..");
+      navigate("/login");
+    } else {
+      alert(`Error: ${error.message || "Error processing request"}`);
+    }
+  }
+};
 
   return (
     <div>
-      <NavbarForUsers inicial="admin" booking="bookinglist" />
+      <NavbarForUsers index="privatehome" booking="bookinglist" />
       <div className="container my-5">
         <h2>Admin Dashboard – Add Car</h2>
 
@@ -271,7 +295,7 @@ export default function AdminDashboard() {
 
           <div className="form-check mb-4">
             <input
-              className="form-check-input"
+              className="form-check-input signup"
               type="checkbox"
               name="is_active"
               checked={formData.is_active}
@@ -283,7 +307,7 @@ export default function AdminDashboard() {
             </label>
           </div>
 
-          <button className="btn btn-primary" type="submit">
+          <button className="btn signup" type="submit">
             Save Car to Inventory
           </button>
         </form>

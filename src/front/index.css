@@ -49,12 +49,12 @@ body {
 }
 
 .signup{
-  background-color:  rgb(129, 24, 6);
+  background-color:  rgb(129, 24, 6) !important;
   color: white;
 }
 
 .signup:hover{
-  background-color:  rgb(185, 34, 7);
+  background-color:  rgb(185, 34, 7) !important;
   color: white;
 }
 
