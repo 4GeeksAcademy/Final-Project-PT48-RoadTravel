@@ -52,6 +52,16 @@ body {
   color: white;
 }
 
+.navbar-button-logout:hover{
+  background-color: red;
+  color: white;
+}
+
+.navbar-button-booking:hover{
+  background-color: #ffc107;
+  color: black;
+}
+
 .imgsize{
   width: 314px;
   height: 245px;

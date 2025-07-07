@@ -41,14 +41,14 @@ export const NavbarForUsers = (prop) => {
           </Link> */}
           {store.user?.role === "administrator" &&(
         <Link to="/admin">
-            <button className="btn btn-primary">Add Vehicle</button>
+            <button className="btn nav-bar-button navbar-button-signup">Add Vehicle</button>
           </Link>
         )}
           <Link to={`/${prop.booking}`}>
-            <button className="btn btn-success">My Bookings</button>
+            <button className="btn nav-bar-button navbar-button-booking">My Bookings</button>
           </Link>
           {isAuthenticated && (
-            <button className="btn btn-danger border" onClick={handleLogout }>
+            <button className="btn nav-bar-button navbar-button-logout border" onClick={handleLogout }>
               Logout
             </button>
           )}
