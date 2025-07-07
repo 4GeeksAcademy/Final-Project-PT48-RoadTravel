@@ -42,7 +42,7 @@ const CardMediumCar = ({ vehicle }) => {
         </ul>
         <div className="container text-center">
           {store.startDates && store.endDates &&
-        <button className="btn btn-success"
+        <button className="btn booking-button navbar-button-login"
           onClick={() => {
             dispatch({ type: fav ? "removeFavorite" : "newFavorite", payload: vehicle });
             nav('/place-reservation/medium/'+ vehicle.license_plate);
