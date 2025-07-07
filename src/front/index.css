@@ -37,6 +37,21 @@ body {
   color: white;
 }
 
+.nav-bar-button{
+  background-color: white;
+  color: rgb(87, 16, 3);
+}
+
+.navbar-button-login:hover{
+  background-color: green;
+  color: white;
+}
+
+.navbar-button-signup:hover{
+  background-color: #0d6efd;
+  color: white;
+}
+
 .imgsize{
   width: 314px;
   height: 245px;
