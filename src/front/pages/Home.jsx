@@ -28,7 +28,7 @@ export default function Home() {
       </div>
 
       <div className="container my-4">
-        <h2 className="text-center my-4">Our Different Ranges</h2>
+        <h2 className="text-center my-4">Our Different Categories</h2>
         <div className="row d-flex justify-content-between container px-4">
           <div className="col-md-4 card" style={{width: '340px'}}>
             <img src="https://www.buyatoyota.com/sharpr/bat/assets/img/vehicle-info/corollahatchback/2025/hero-image.png" className="card-img-top imgsize" alt="..."/>
