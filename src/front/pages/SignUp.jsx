@@ -37,7 +37,7 @@ export function SignUp() {
             const data = await resp.json(); 
 
             if (resp.ok) {
-                alert("¡Registro exitoso!");
+                alert("Registration successful!");
 
               
                 const userRole = data.user ? data.user.role : null;

@@ -98,27 +98,27 @@ export default function storeReducer(store, action = {}) {
       };
 
     case "set_startDate":
-      // Almacena la cadena de fecha real de inicio
+     
       return {
         ...store,
-        startDates: action.payload.startDate, // Cambiado de startDates a startDate
+        startDates: action.payload.startDate, 
       };
 
     case "set_endDate":
-      // Almacena la cadena de fecha real de fin
+     
       return {
         ...store,
-        endDates: action.payload.endDate, // Cambiado de endDates a endDate
+        endDates: action.payload.endDate, 
       };
 
     case "login_success":
-      // Verificar token antes de almacenar
+    
       if (
         !action.payload.token ||
         action.payload.token.split(".").length !== 3
       ) {
         console.error("Token JWT inválido recibido");
-        return store; // Mantener el estado actual sin cambios
+        return store; 
       }
 
       localStorage.setItem("token", action.payload.token);

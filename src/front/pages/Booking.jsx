@@ -96,7 +96,7 @@ export default function Booking() {
         <div>
             <NavbarForUsers  index="privatehome" booking="bookinglist" />
             
-            <div className="container my-5">
+            <div className="container my-5 signup-form">
                 <h2 className="mb-4">
                     {store.user?.role === "administrator" 
                         ? "All Reservations (Admin View)" 

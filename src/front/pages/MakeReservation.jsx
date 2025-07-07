@@ -83,7 +83,7 @@ export default function MakeReservation() {
             }
             const data = await res.json();
             const reservationId = data.new_booking.id;
-            navigate(`/my-reservations`);
+            navigate(`/bookinglist`);
         } catch (err) {
             console.error("Error:", err);
             alert(err.message || "Error confirming reservation.");
@@ -92,7 +92,7 @@ export default function MakeReservation() {
     return (
         <div>
            
-            <NavbarForUsers inicial="privatehome" booking="my-reservations" />
+            <NavbarForUsers index="privatehome" booking="bookinglist" />
              <div className="d-flex justify-content-center align-items-center my-4 signup-form">
         <form  onSubmit={handleSubmit} className="row g-3 d-flex justify-content-center align-items-center my-4 container card no-direction">
             <div className="col-md-9">

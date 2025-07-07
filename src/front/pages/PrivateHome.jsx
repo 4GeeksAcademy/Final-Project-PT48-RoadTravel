@@ -86,6 +86,32 @@ export default function PrivateHome() {
     fetchCars("premium", startDate, endDate);
   };
 
+  const handleCleanFilters = () => {
+   
+    setStartDate("");
+    setEndDate("");
+
+
+    dispatch({
+      type: "set_startDate",
+      payload: {
+        startDate: "",
+      },
+    });
+    dispatch({
+      type: "set_endDate",
+      payload: {
+        endDate: "",
+      },
+    });
+
+    
+    fetchCars("subcompact", "", "");
+    fetchCars("medium", "", "");
+    fetchCars("premium", "", "");
+  };
+  
+
   return (
     <div>
       <NavbarForUsers index= "privatehome" booking="bookinglist" />
@@ -127,7 +153,7 @@ export default function PrivateHome() {
         </form>
         {(startDate || endDate) && (
           <div className="mt-3 text-end">
-            <button className="btn btn-link btn-sm" onClick={() => { setStartDate(""); setEndDate(""); handleApplyFilters(); }}>
+            <button className="btn btn-link btn-sm" onClick={handleCleanFilters}>
               Clean Filters
             </button>
           </div>
