@@ -51,11 +51,29 @@ export default function PrivateHome() {
 
 
   useEffect(() => {
-    fetchCars("subcompact");
-    fetchCars("medium");
-    fetchCars("premium");
+     setStartDate("");
+    setEndDate("");
+
+
+    dispatch({
+      type: "set_startDate",
+      payload: {
+        startDate: "",
+      },
+    });
+    dispatch({
+      type: "set_endDate",
+      payload: {
+        endDate: "",
+      },
+    });
+
     
-  }, [fetchCars]); 
+    fetchCars("subcompact", "", "");
+    fetchCars("medium", "", "");
+    fetchCars("premium", "", "");
+    
+  }, []); 
 
   useEffect(() => {
     console.log("Global state (store) updated:", store);

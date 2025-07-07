@@ -107,91 +107,91 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [loginFailed, setLoginFailed] = useState(false);
 
-const handleLogin = async (e) => {
-  e.preventDefault();
-  try {
-    const res = await fetch(`${backendUrl}/api/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email, password })
-    });
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(`${backendUrl}/api/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+      });
 
-    if (!res.ok) {
-      setLoginFailed(true);
-      return;
-    }
-
-    const data = await res.json();
-    
-
-    if (!data.access_token || data.access_token.split('.').length !== 3) {
-      throw new Error("Invalid JWT token received from server");
-    }
-
-    dispatch({
-      type: "login_success",
-      payload: {
-        token: data.access_token,
-        user: data.user
+      if (!res.ok) {
+        setLoginFailed(true);
+        return;
       }
-    });
 
-   
-    localStorage.setItem("token", data.access_token);
-    localStorage.setItem("user", JSON.stringify(data.user));
+      const data = await res.json();
 
-    const userRoles = data.roles || [];
-    if (userRoles.includes("client")) {
-      navigate("/privatehome");
-    } else if (userRoles.includes("administrator")) {
-      navigate("/privatehome");
-    } else {
-      navigate("/");
-      console.warn("Unidentified role:", userRoles);
+
+      if (!data.access_token || data.access_token.split('.').length !== 3) {
+        throw new Error("Invalid JWT token received from server");
+      }
+
+      dispatch({
+        type: "login_success",
+        payload: {
+          token: data.access_token,
+          user: data.user
+        }
+      });
+
+
+      localStorage.setItem("token", data.access_token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      const userRoles = data.roles || [];
+      if (userRoles.includes("client")) {
+        navigate("/privatehome");
+      } else if (userRoles.includes("administrator")) {
+        navigate("/privatehome");
+      } else {
+        navigate("/");
+        console.warn("Unidentified role:", userRoles);
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setLoginFailed(true);
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
     }
-  } catch (err) {
-    console.error("Login error:", err);
-    setLoginFailed(true);
-   
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-  }
-};
+  };
 
   return (
     <div>
-    <Navbar/>
-            <div className="d-flex justify-content-center align-items-center my-4 signup-form">
-    <form className="container card row" style={{ width: "100%", maxWidth: "800px" }} onSubmit={handleLogin}>
-      <div className=" mt-2 col-12">
-        <label className="form-label">Email:</label>
-        <input className="form-control"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+      <Navbar />
+      <div className="d-flex justify-content-center align-items-center my-4 signup-form">
+        <form className="container card row" style={{ width: "100%", maxWidth: "800px" }} onSubmit={handleLogin}>
+          <div className=" mt-2 col-12">
+            <label className="form-label">Email:</label>
+            <input className="form-control"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className=" mt-2 col-12">
+            <label className="form-label">Password:</label>
+            <input className="form-control"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <div className="col-12 my-2 d-flex justify-content-center">
+            <button className="btn signup " type="submit">Login</button>
+            {loginFailed && (
+              <p style={{ color: "red" }}>Login failed. Please try again.</p>
+            )}
+          </div>
+        </form>
       </div>
-      <div className=" mt-2 col-12">
-        <label className="form-label">Password:</label>
-        <input className="form-control"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-      <div className="col-12 my-2 d-flex justify-content-center">
-      <button  className="btn signup " type="submit">Login</button>
-      {loginFailed && (
-        <p style={{ color: "red" }}>Login failed. Please try again.</p>
-      )}
-      </div>
-    </form>
     </div>
-</div>
   );
 };
 

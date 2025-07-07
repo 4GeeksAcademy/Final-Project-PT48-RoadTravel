@@ -11,6 +11,7 @@ export const NavbarForUsers = (prop) => {
   const handleLogout = () => {
     dispatch({ type: "logout" });
     navigate("/");
+    
   };
   return (
      <nav className="navbar navbar-expand-lg nav-bar">

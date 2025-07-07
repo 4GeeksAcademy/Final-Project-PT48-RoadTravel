@@ -4,6 +4,30 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 const CardMediumCar = ({ vehicle }) => {
   const nav = useNavigate();
+  const handleCleanFilters = () => {
+   
+    setStartDate("");
+    setEndDate("");
+
+
+    dispatch({
+      type: "set_startDate",
+      payload: {
+        startDate: "",
+      },
+    });
+    dispatch({
+      type: "set_endDate",
+      payload: {
+        endDate: "",
+      },
+    });
+
+    
+    fetchCars("subcompact", "", "");
+    fetchCars("medium", "", "");
+    fetchCars("premium", "", "");
+  };
   const { store, dispatch } = useGlobalReducer();
   const fav = store.favorites.some(f => f.license_plate === vehicle.license_plate);
   return (
@@ -22,6 +46,7 @@ const CardMediumCar = ({ vehicle }) => {
           onClick={() => {
             dispatch({ type: fav ? "removeFavorite" : "newFavorite", payload: vehicle });
             nav('/place-reservation/medium/'+ vehicle.license_plate);
+            handleCleanFilters;
           }}
         >
           Booking

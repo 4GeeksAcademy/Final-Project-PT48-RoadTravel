@@ -62,6 +62,12 @@ body {
   height: 750px;
 }
 
+.booking-vist{
+  min-height: 100vh; /* Ocupa al menos el 100% de la altura del viewport */
+  
+  width: 100%; /* Asegura que ocupe todo el ancho */
+}
+
 .no-direction{
   flex-direction: row;
 }

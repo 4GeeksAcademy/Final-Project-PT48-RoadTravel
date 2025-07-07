@@ -276,7 +276,7 @@ def edit_reservation(id):
         Booking.car_id == reservation.car_id,
         Booking.id != reservation.id,
         Booking.start_day <= end_day_obj,
-        Booking.end_day >= start_day_obj
+        Booking.end_day >= start_day_obj,
     ).first()
     if conflict_booking:
         return jsonify({'msg': 'Car already booked in that date range'}), 409

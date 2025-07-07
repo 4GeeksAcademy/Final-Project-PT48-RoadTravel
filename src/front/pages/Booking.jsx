@@ -36,7 +36,8 @@ export default function Booking() {
         } catch (err) {
             setError(err.message);
             console.error("Error loading reservations:", err);
-        } finally {
+        } 
+        finally {
             setLoading(false);
         }
     };
@@ -89,18 +90,20 @@ export default function Booking() {
         fetchReservations();
     }, [store.user?.role]);
 
-    if (loading) return <div className="container my-5">Cargando...</div>;
+    if (loading) return <div className="container my-5">Loading...</div>;
     if (error) return <div className="container my-5">Error: {error}</div>;
+
+    
 
     return (
         <div>
             <NavbarForUsers  index="privatehome" booking="bookinglist" />
             
-            <div className="container my-5 signup-form">
+            <div className="container my-5 booking-vist">
                 <h2 className="mb-4">
                     {store.user?.role === "administrator" 
                         ? "All Reservations (Admin View)" 
-                        : "Mis Reservaciones"}
+                        : "My Reservations"}
                 </h2>
 
                 {reservations.length === 0 ? (
@@ -141,7 +144,8 @@ export default function Booking() {
                                             setEditId(res.id);
                                             setEditDates({
                                                 start_day: res.start_day,
-                                                end_day: res.end_day
+                                                end_day: res.end_day,
+                                                
                                             });
                                         }}
                                     >
