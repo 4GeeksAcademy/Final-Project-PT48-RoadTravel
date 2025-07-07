@@ -39,7 +39,7 @@ const CardSubcompactCar = ({ vehicle }) => {
           
           
           
-          <li>License plate: {vehicle.license_plate}</li>
+          <li>License Plate: {vehicle.license_plate}</li>
           <li>Color: {vehicle.color}</li>
           <li>Price: ${vehicle.price}/day</li>
         </ul>

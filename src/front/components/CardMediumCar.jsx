@@ -36,7 +36,7 @@ const CardMediumCar = ({ vehicle }) => {
       <div className="card-body">
         <h5>{vehicle.make} {vehicle.model} {vehicle.year}</h5>
         <ul>
-          <li>License plate: {vehicle.license_plate}</li>
+          <li>License Plate: {vehicle.license_plate}</li>
           <li>Color: {vehicle.color}</li>
           <li>Price: ${vehicle.price}/day</li>
         </ul>
