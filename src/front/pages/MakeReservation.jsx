@@ -18,17 +18,17 @@ export default function MakeReservation() {
         price: ""
     });
     useEffect(() => {
-        // Asegúrate de que store.favorites tenga un coche y que las fechas estén disponibles
+        
         if (store[type].length > 0 && store.startDates && store.endDates) {
             const car = store[type].find(item => item.license_plate == id);
             console.log(car);
             
-            const startDate = store.startDates; // Accede directamente a la cadena de fecha
-            const endDate = store.endDates;     // Accede directamente a la cadena de fecha
+            const startDate = store.startDates; 
+            const endDate = store.endDates;    
             const date1 = new Date(startDate);
             const date2 = new Date(endDate);
             const diffTime = Math.abs(date2 - date1);
-            // Asegúrate de que diffDays sea al menos 1, incluso para reservas del mismo día
+            
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
             setReservationData({
                 model: car.model,
@@ -41,7 +41,7 @@ export default function MakeReservation() {
             console.log(car.amount);
             
         }
-    }, [store.subcompact, store.premium, store.medium, store.startDates, store.endDates]); // Añade dependencias a useEffect
+    }, [store.subcompact, store.premium, store.medium, store.startDates, store.endDates]); 
     console.log(reservationData);
     
     const handleChange = (e) => {
@@ -54,7 +54,7 @@ export default function MakeReservation() {
         e.preventDefault();
         const token = localStorage.getItem("token");
         if (!token) {
-            alert("Debes iniciar sesión para hacer una reserva.");
+            alert("You must log in to make a reservation.");
             return;
         }
         console.log(reservationData);
@@ -79,20 +79,20 @@ export default function MakeReservation() {
             });
             if (!res.ok) {
                 const errorData = await res.json();
-                throw new Error(errorData.msg || "Error al crear la reserva");
+                throw new Error(errorData.msg || "Error creating reservation");
             }
             const data = await res.json();
             const reservationId = data.new_booking.id;
-            navigate(`/my-reservations`);
+            navigate(`/bookinglist`);
         } catch (err) {
             console.error("Error:", err);
-            alert(err.message || "Error al confirmar la reserva.");
+            alert(err.message || "Error confirming reservation.");
         }
     };
     return (
         <div>
            
-            <NavbarForUsers inicial="privatehome" booking="my-reservations" />
+            <NavbarForUsers index="privatehome" booking="bookinglist" />
              <div className="d-flex justify-content-center align-items-center my-4 signup-form">
         <form  onSubmit={handleSubmit} className="row g-3 d-flex justify-content-center align-items-center my-4 container card no-direction">
             <div className="col-md-9">

@@ -4,11 +4,35 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 const CardSubcompactCar = ({ vehicle }) => {
   const nav = useNavigate();
+  const handleCleanFilters = () => {
+   
+    setStartDate("");
+    setEndDate("");
+
+
+    dispatch({
+      type: "set_startDate",
+      payload: {
+        startDate: "",
+      },
+    });
+    dispatch({
+      type: "set_endDate",
+      payload: {
+        endDate: "",
+      },
+    });
+
+    
+    fetchCars("subcompact", "", "");
+    fetchCars("medium", "", "");
+    fetchCars("premium", "", "");
+  };
   const { store, dispatch } = useGlobalReducer();
   const fav = store.favorites.some(f => f.license_plate === vehicle.license_plate);
   return (
     <div className="card m-2" style={{width: '240px'}}>
-      <img src={vehicle.image_url} style={{height:'140px',objectFit:'cover'}} alt={vehicle.name} /> {/* El admin debe subir la foto */}
+      <img src={vehicle.image_url} style={{height:'140px',objectFit:'cover'}} alt={vehicle.name} /> 
       <div className="card-body">
         <h5>{vehicle.make} {vehicle.model} {vehicle.year}</h5>
         <ul>
@@ -25,6 +49,7 @@ const CardSubcompactCar = ({ vehicle }) => {
           onClick={() => {
             dispatch({ type: fav ? "removeFavorite" : "newFavorite", payload: vehicle });
             nav('/place-reservation/subcompact/'+ vehicle.license_plate );
+            handleCleanFilters;
           }}
           
         >

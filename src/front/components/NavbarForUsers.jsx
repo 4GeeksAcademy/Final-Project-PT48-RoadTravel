@@ -11,18 +11,39 @@ export const NavbarForUsers = (prop) => {
   const handleLogout = () => {
     dispatch({ type: "logout" });
     navigate("/");
+    
   };
   return (
-    <nav className="navbar navbar-expand-lg navbar-light nav-bar">
-      <div className="container ">
-        <Link className="navbar-brand text-white" to={`/${prop.inicial}`}>
+     <nav className="navbar navbar-expand-lg nav-bar">
+      <div className="container">
+        <Link className="navbar-brand text-white nav-link" to={`/${prop.index}`}>
           Road Travel Rent-a-Car
         </Link>
+        
+        {/* Botón Hamburguesa */}
+        <button 
+          className="navbar-toggler" 
+          type="button" 
+          data-bs-toggle="collapse" 
+          data-bs-target="#navbarContent" 
+          aria-controls="navbarContent" 
+          aria-expanded="false" 
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
 
-        <div className="ml-auto d-flex gap-2">
+        <div className="collapse navbar-collapse my-3" id="navbarContent">
+          <div className="navbar-nav ms-auto">  {/* ms-auto para alinear a la derecha */}
+            <div className="d-flex gap-2">
           {/* <Link to={`/${prop.inicial}`}>
             <button className="btn btn-primary">Home</button>
           </Link> */}
+          {store.user?.role === "administrator" &&(
+        <Link to="/admin">
+            <button className="btn btn-primary">Add Vehicle</button>
+          </Link>
+        )}
           <Link to={`/${prop.booking}`}>
             <button className="btn btn-success">My Bookings</button>
           </Link>
@@ -33,6 +54,8 @@ export const NavbarForUsers = (prop) => {
           )}
           
         </div>
+      </div>
+      </div>
       </div>
     </nav>
   );

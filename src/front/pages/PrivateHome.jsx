@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react"; // Importar useState y useCallback
+import React, { useEffect, useState, useCallback } from "react"; 
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import CardSubcompactCar from "../components/CardSubcompactCar.jsx";
 import CardMediumCar from "../components/CardMediumCar.jsx";
@@ -51,47 +51,91 @@ export default function PrivateHome() {
 
 
   useEffect(() => {
-    fetchCars("subcompact");
-    fetchCars("medium");
-    fetchCars("premium");
-    
-  }, [fetchCars]); 
-
-  useEffect(() => {
-    console.log("Estado global (store) actualizado:", store);
-    console.log("filterStartDate en store:", store.startDates);
-    console.log("filterEndDate en store:", store.endDates);
-  }, [store]); // Se ejecutará cada vez que el objeto store cambie
+     setStartDate("");
+    setEndDate("");
 
 
-  const handleApplyFilters = (e) => {
-    e.preventDefault()
-    // Despacha los valores reales de startDate y endDate al store
     dispatch({
       type: "set_startDate",
       payload: {
-        startDate: startDate, // Pasa el valor real del estado
+        startDate: "",
       },
     });
     dispatch({
       type: "set_endDate",
       payload: {
-        endDate: endDate, // Pasa el valor real del estado
+        endDate: "",
       },
     });
 
-    console.log("Aplicando filtros con:", startDate, endDate); // Loggea los valores actuales del estado
+    
+    fetchCars("subcompact", "", "");
+    fetchCars("medium", "", "");
+    fetchCars("premium", "", "");
+    
+  }, []); 
+
+  useEffect(() => {
+    console.log("Global state (store) updated:", store);
+    console.log("filterStartDate en store:", store.startDates);
+    console.log("filterEndDate en store:", store.endDates);
+  }, [store]); 
+
+
+  const handleApplyFilters = (e) => {
+    e.preventDefault()
+    
+    dispatch({
+      type: "set_startDate",
+      payload: {
+        startDate: startDate, 
+      },
+    });
+    dispatch({
+      type: "set_endDate",
+      payload: {
+        endDate: endDate, 
+      },
+    });
+
+    console.log("Applying filters with:", startDate, endDate); 
     fetchCars("subcompact", startDate, endDate);
     fetchCars("medium", startDate, endDate);
     fetchCars("premium", startDate, endDate);
   };
 
+  const handleCleanFilters = () => {
+   
+    setStartDate("");
+    setEndDate("");
+
+
+    dispatch({
+      type: "set_startDate",
+      payload: {
+        startDate: "",
+      },
+    });
+    dispatch({
+      type: "set_endDate",
+      payload: {
+        endDate: "",
+      },
+    });
+
+    
+    fetchCars("subcompact", "", "");
+    fetchCars("medium", "", "");
+    fetchCars("premium", "", "");
+  };
+  
+
   return (
     <div>
-      <NavbarForUsers inicial="privatehome" booking="my-reservations" />
+      <NavbarForUsers index= "privatehome" booking="bookinglist" />
       <div className="container my-4">
       <h1 className="mb-4 text-center">Vehicle Catalog</h1>
-
+      {store.user?.role === "client" &&(
       <div className="card p-4 mb-4 shadow-sm">
         <h4 className="mb-3">Choose your dates</h4>
         <form onSubmit={handleApplyFilters}>
@@ -127,12 +171,13 @@ export default function PrivateHome() {
         </form>
         {(startDate || endDate) && (
           <div className="mt-3 text-end">
-            <button className="btn btn-link btn-sm" onClick={() => { setStartDate(""); setEndDate(""); handleApplyFilters(); }}>
+            <button className="btn btn-link btn-sm" onClick={handleCleanFilters}>
               Clean Filters
             </button>
           </div>
         )}
       </div>
+      )}
 
       <h2>Subcompact Cars</h2>
       {store.subcompact.length === 0 ? <p>No cars available in this category for the selected dates.</p> :

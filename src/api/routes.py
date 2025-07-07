@@ -72,7 +72,7 @@ def login():
     if not data.get('email') or not data.get('password'):
         return jsonify({"msg": "Provide email and password"}), 400
 
-    # Usar db.session.execute para consultas más modernas
+    
     user = db.session.execute(db.select(User).filter_by(email=data['email'])).scalar_one_or_none()
     if not user or not check_password_hash(user.password, data['password']):
         return jsonify({"msg": "Bad credentials"}), 401
@@ -111,7 +111,7 @@ def list_cars():
         except ValueError:
             return jsonify({'msg': 'Formato de fecha de fin inválido. Usa YYYY-MM-DD'}), 400
 
-    # Lógica de filtrado por disponibilidad de fechas (sin superposición de reservas)
+    
     if start_date and end_date:
         subquery_booked_car_ids = db.session.query(Booking.car_id).filter(
             Booking.start_day <= end_date,
@@ -128,7 +128,7 @@ def list_cars():
 
 @api.route('/cars/<license_plate>', methods=['GET'])
 def get_car(license_plate):
-    # Usar db.session.get para obtener por PK (más directo)
+    
     car = db.session.get(Car, license_plate)
     if not car:
         return jsonify({"msg": "Not found"}), 404
@@ -276,7 +276,7 @@ def edit_reservation(id):
         Booking.car_id == reservation.car_id,
         Booking.id != reservation.id,
         Booking.start_day <= end_day_obj,
-        Booking.end_day >= start_day_obj
+        Booking.end_day >= start_day_obj,
     ).first()
     if conflict_booking:
         return jsonify({'msg': 'Car already booked in that date range'}), 409
@@ -303,6 +303,36 @@ def delete_reservation(id):
     db.session.commit()
 
     return jsonify({'msg': 'Reservation deleted succesfully'}), 200
+
+
+@api.route('/admin/reservations', methods=['GET'])
+@jwt_required()
+def get_all_reservations():
+    current_user_id = get_jwt_identity()
+    user = db.session.get(User, current_user_id)
+    
+
+    if not user or user.role != RoleEnum.administrator:
+        return jsonify({"msg": "Unauthorized"}), 403
+    
+  
+    reservations = db.session.query(
+        Booking,
+        User.name.label('user_name'),
+        User.email.label('user_email')
+    ).join(
+        User, Booking.user_id == User.id
+    ).all()
+    
+    
+    result = []
+    for booking, user_name, user_email in reservations:
+        booking_data = booking.serialize()
+        booking_data['user_name'] = user_name
+        booking_data['user_email'] = user_email
+        result.append(booking_data)
+    
+    return jsonify(result), 200
 
   
     # trans = "automatic" if data.get('transmission') == "a" else "manual"
