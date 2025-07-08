@@ -82,6 +82,7 @@ export default function MyReservations() {
                             <h5>{res.car_model} - {res.car_id}</h5>
                             <p><strong>From:</strong> {res.start_day} <strong>To:</strong> {res.end_day}</p>
                             <p><strong>Price:</strong> ${res.amount}</p>
+                            <p><strong>Reservation ID:</strong> {res.id}</p>
                             <div className="d-flex gap-2">
                                 <button className="btn btn-danger btn-sm" onClick={() => deleteReservation(res.id)}>
                                     Delete

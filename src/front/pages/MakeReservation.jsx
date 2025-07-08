@@ -41,8 +41,7 @@ export default function MakeReservation() {
             console.log(car.amount);
             
         }
-    }, [store.subcompact, store.premium, store.medium, store.startDates, store.endDates]); 
-    console.log(reservationData);
+    }, [store.subcompact, store.premium, store.medium, store.startDates, store.endDates]);
     
     const handleChange = (e) => {
         setReservationData({
