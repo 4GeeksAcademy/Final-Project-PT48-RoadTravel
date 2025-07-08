@@ -260,6 +260,7 @@ def edit_reservation(id):
 
     start_day = data.get('start_day')
     end_day = data.get('end_day')
+    price = data.get('price')
     if not start_day or not end_day:
         return jsonify({'msg': 'Missing start day or end day'}), 400
 
@@ -283,6 +284,7 @@ def edit_reservation(id):
 
     reservation.start_day = start_day_obj
     reservation.end_day = end_day_obj
+    reservation.amount = price
     db.session.commit()
 
     return jsonify({'msg': 'Reservation updated successfully'}), 200

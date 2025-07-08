@@ -136,6 +136,7 @@ class Booking(db.Model):
             "end_day": self.end_day.isoformat(),
             "user_id": self.user_id,
             "car_id": self.car_id,
+            "car_price": self.car.price,
             "license_number": self.license_number
         }
 
