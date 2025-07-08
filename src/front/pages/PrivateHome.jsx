@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react"; 
+import React, { useEffect, useState, useCallback } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import CardSubcompactCar from "../components/CardSubcompactCar.jsx";
 import CardMediumCar from "../components/CardMediumCar.jsx";
@@ -21,7 +21,7 @@ export default function PrivateHome() {
       const token = localStorage.getItem("token");
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-  
+
       let url = `${backendUrl}/api/cars?type=${category}`;
       if (start) {
         url += `&start_date=${start}`;
@@ -48,65 +48,10 @@ export default function PrivateHome() {
       console.error(`Car loading failed ${category}:`, error);
       dispatch({ type: "set_cars", category: category, payload: [] });
     }
-  }, [dispatch]); 
+  }, [dispatch]);
 
 
   useEffect(() => {
-     setStartDate("");
-    setEndDate("");
-
-
-    dispatch({
-      type: "set_startDate",
-      payload: {
-        startDate: "",
-      },
-    });
-    dispatch({
-      type: "set_endDate",
-      payload: {
-        endDate: "",
-      },
-    });
-
-    
-    fetchCars("subcompact", "", "");
-    fetchCars("medium", "", "");
-    fetchCars("premium", "", "");
-    
-  }, []); 
-
-  useEffect(() => {
-    console.log("Global state (store) updated:", store);
-    console.log("filterStartDate en store:", store.startDates);
-    console.log("filterEndDate en store:", store.endDates);
-  }, [store]); 
-
-
-  const handleApplyFilters = (e) => {
-    e.preventDefault()
-    
-    dispatch({
-      type: "set_startDate",
-      payload: {
-        startDate: startDate, 
-      },
-    });
-    dispatch({
-      type: "set_endDate",
-      payload: {
-        endDate: endDate, 
-      },
-    });
-
-    console.log("Applying filters with:", startDate, endDate); 
-    fetchCars("subcompact", startDate, endDate);
-    fetchCars("medium", startDate, endDate);
-    fetchCars("premium", startDate, endDate);
-  };
-
-  const handleCleanFilters = () => {
-   
     setStartDate("");
     setEndDate("");
 
@@ -124,92 +69,150 @@ export default function PrivateHome() {
       },
     });
 
-    
+
+    fetchCars("subcompact", "", "");
+    fetchCars("medium", "", "");
+    fetchCars("premium", "", "");
+
+  }, []);
+
+  useEffect(() => {
+    console.log("Global state (store) updated:", store);
+    console.log("filterStartDate en store:", store.startDates);
+    console.log("filterEndDate en store:", store.endDates);
+  }, [store]);
+
+
+  const handleApplyFilters = (e) => {
+    e.preventDefault()
+
+    dispatch({
+      type: "set_startDate",
+      payload: {
+        startDate: startDate,
+      },
+    });
+    dispatch({
+      type: "set_endDate",
+      payload: {
+        endDate: endDate,
+      },
+    });
+
+    console.log("Applying filters with:", startDate, endDate);
+    fetchCars("subcompact", startDate, endDate);
+    fetchCars("medium", startDate, endDate);
+    fetchCars("premium", startDate, endDate);
+  };
+
+  const handleCleanFilters = () => {
+
+    setStartDate("");
+    setEndDate("");
+
+
+    dispatch({
+      type: "set_startDate",
+      payload: {
+        startDate: "",
+      },
+    });
+    dispatch({
+      type: "set_endDate",
+      payload: {
+        endDate: "",
+      },
+    });
+
+
     fetchCars("subcompact", "", "");
     fetchCars("medium", "", "");
     fetchCars("premium", "", "");
   };
-  
+
 
   return (
     <div>
-      <NavbarForUsers index= "privatehome" booking="bookinglist" />
+      <NavbarForUsers index="privatehome" booking="bookinglist" />
       <div className="container my-4">
-        
-      <h1 className="mb-4 text-center">Vehicle Catalog</h1>
-      {store.user?.role === "client" &&(
-      <div className="card p-4 mb-4 shadow-sm">
-        <h4 className="mb-3">Choose your dates</h4>
-        <form onSubmit={handleApplyFilters}>
-        <div className="row g-3 align-items-end">
-          <div className="col-md-5">
-            <label htmlFor="startDate" className="form-label">Start Date:</label>
-            <input 
-              type="date" 
-              className="form-control" 
-              id="startDate" 
-              value={startDate} 
-              onChange={(e) => setStartDate(e.target.value) }
-              required 
-            />
-          </div>
-          <div className="col-md-5">
-            <label htmlFor="endDate" className="form-label">End Date:</label>
-            <input 
-              type="date" 
-              className="form-control" 
-              id="endDate" 
-              value={endDate} 
-              onChange={(e) => setEndDate(e.target.value)} 
-              required
-            />
-          </div>
-          <div className="col-md-2 ">
-            <input className="btn signup w-100" type="submit" value={"Apply"}/>
-              
-            
-          </div>
-        </div>
-        </form>
-        {(startDate || endDate) && (
-          <div className="mt-3 text-end">
-            <button className="btn signup" onClick={handleCleanFilters}>
-              Clean Filters
-            </button>
+
+        <h1 className="mb-4 text-center">Vehicle Catalog</h1>
+        {store.user?.role === "client" && (
+          <div className="card p-4 mb-4 shadow-sm">
+            <h4 className="mb-3">Choose your dates</h4>
+            <form onSubmit={handleApplyFilters}>
+              <div className="row g-3 align-items-end">
+                <div className="col-md-5">
+                  <label htmlFor="startDate" className="form-label">Start Date:</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="startDate"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="col-md-5">
+                  <label htmlFor="endDate" className="form-label">End Date:</label>
+                  <input
+                    type="date"
+                    className="form-control"
+                    id="endDate"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="col-md-2 ">
+                  <input className="btn signup w-100" type="submit" value={"Apply"} />
+
+
+                </div>
+              </div>
+            </form>
+            {(startDate || endDate) && (
+              <div className="mt-3 text-end">
+                <button className="btn signup" onClick={handleCleanFilters}>
+                  Clean Filters
+                </button>
+              </div>
+            )}
           </div>
         )}
-      </div>
-      )}
 
-      <h2>Subcompact Cars</h2>
-      {store.subcompact.length === 0 ? <p>No cars available in this category for the selected dates.</p> :
-        <div className="d-flex flex-wrap">
-          {store.subcompact.map(v => <CardSubcompactCar key={v.license_plate} vehicle={v} />)}
-        </div>
-      }
+        <h2>Subcompact Cars</h2>
+        {store.subcompact.length === 0 ? <p>No cars available in this category for the selected dates.</p> :
+          <div className="d-flex flex-wrap">
+            {store.subcompact.map(v => <CardSubcompactCar key={v.license_plate} vehicle={v} />)}
+          </div>
+        }
 
-      <h2>Medium Cars</h2>
-      {store.medium.length === 0 ? <p>No cars available in this category for the selected dates.</p> :
-        <div className="d-flex flex-wrap">
-          {store.medium.map(v => <CardMediumCar key={v.license_plate} vehicle={v} />)}
-        </div>
-      }
+        <h2>Medium Cars</h2>
+        {store.medium.length === 0 ? <p>No cars available in this category for the selected dates.</p> :
+          <div className="d-flex flex-wrap">
+            {store.medium.map(v => <CardMediumCar key={v.license_plate} vehicle={v} />)}
+          </div>
+        }
 
-      <h2>Premium Cars</h2>
-      {store.premium.length === 0 ? <p>No cars available in this category for the selected dates.</p> :
-        <div className="d-flex flex-wrap">
-          {store.premium.map(v => <CardPremiumCar key={v.license_plate} vehicle={v} />)}
-        </div>
-      }
-
+        <h2>Premium Cars</h2>
+        {store.premium.length === 0 ? <p>No cars available in this category for the selected dates.</p> :
+          <div className="d-flex flex-wrap">
+            {store.premium.map(v => <CardPremiumCar key={v.license_plate} vehicle={v} />)}
+          </div>
+        }
+        {store.user?.role === "client" && (
+      <div>
       <h2>Still don't know which car to choose?</h2>
       <p>We can recommend the perfect car for you, based on your budget, luggage, and number of passengers. Enter your details here and we'll help you choose!</p>
       <div className="my-4">
       <AiComponent/>
       </div>
+      </div>
+        )}
+      </div>
+
     </div>
-    
-</div>
 
   );
 }
