@@ -36,8 +36,7 @@ export default function Booking() {
         } catch (err) {
             setError(err.message);
             console.error("Error loading reservations:", err);
-        } 
-        finally {
+        } finally {
             setLoading(false);
         }
     };
@@ -126,6 +125,8 @@ export default function Booking() {
                                     <strong>Date:</strong> {res.start_day} al {res.end_day}
                                     <br />
                                     <strong>Price:</strong> ${res.amount}
+                                     <br />
+                                    <strong>:</strong> {res.id}
                                     <br />
                                     {res.license_number && <><strong>Licencia:</strong> {res.license_number}</>}
                                 </p>
@@ -145,7 +146,6 @@ export default function Booking() {
                                             setEditDates({
                                                 start_day: res.start_day,
                                                 end_day: res.end_day,
-                                                
                                             });
                                         }}
                                     >

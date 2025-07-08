@@ -70,7 +70,7 @@ export default function MyReservations() {
 
     return (
         <div>
-        <NavbarForUsers inicial="privatehome" booking="my-reservations" />
+        <NavbarForUsers index="privatehome" booking="my-reservations" />
         <div className="container my-5 signup-form">
             <h2 className="mb-4">My Reservations</h2>
             {reservations.length === 0 ? (
