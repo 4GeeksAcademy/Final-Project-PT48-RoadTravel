@@ -4,6 +4,7 @@ import CardSubcompactCar from "../components/CardSubcompactCar.jsx";
 import CardMediumCar from "../components/CardMediumCar.jsx";
 import CardPremiumCar from "../components/CardPremiumCar.jsx";
 import { NavbarForUsers } from "../components/NavbarForUsers.jsx";
+import AiComponent from "../components/AiComponent.jsx";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -134,6 +135,7 @@ export default function PrivateHome() {
     <div>
       <NavbarForUsers index= "privatehome" booking="bookinglist" />
       <div className="container my-4">
+        
       <h1 className="mb-4 text-center">Vehicle Catalog</h1>
       {store.user?.role === "client" &&(
       <div className="card p-4 mb-4 shadow-sm">
@@ -199,7 +201,14 @@ export default function PrivateHome() {
           {store.premium.map(v => <CardPremiumCar key={v.license_plate} vehicle={v} />)}
         </div>
       }
+
+      <h2>Still don't know which car to choose?</h2>
+      <p>We can recommend the perfect car for you, based on your budget, luggage, and number of passengers. Enter your details here and we'll help you choose!</p>
+      <div className="my-4">
+      <AiComponent/>
+      </div>
     </div>
+    
 </div>
 
   );
