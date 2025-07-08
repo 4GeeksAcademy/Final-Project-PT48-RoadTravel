@@ -171,7 +171,7 @@ export default function PrivateHome() {
         </form>
         {(startDate || endDate) && (
           <div className="mt-3 text-end">
-            <button className="btn btn-link btn-sm" onClick={handleCleanFilters}>
+            <button className="btn signup" onClick={handleCleanFilters}>
               Clean Filters
             </button>
           </div>

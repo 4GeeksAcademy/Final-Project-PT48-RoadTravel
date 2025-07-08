@@ -30,10 +30,10 @@ export const Navbar = () => {
           <div className="navbar-nav ms-auto">  {/* ms-auto para alinear a la derecha */}
             <div className="d-flex gap-2">
               <Link className="nav-link" to="/signup">
-                <button className="btn btn-primary">Sign Up</button>
+                <button className="btn nav-bar-button navbar-button-signup">Sign Up</button>
               </Link>
               <Link className="nav-link" to="/login">
-                <button className="btn btn-success">Login</button>
+                <button className="btn nav-bar-button navbar-button-login">Login</button>
               </Link>
             </div>
           </div>

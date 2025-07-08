@@ -208,11 +208,11 @@ export default function AdminDashboard() {
             ))}
           </div>
           <button
-            className="btn btn-secondary mt-3"
+            className="btn signup mt-3"
             type="button"
             onClick={fetchSpecs}
           >
-            Fetch Car Specs
+            Get Car Details
           </button>
 
           {specs.fuel_type && (
@@ -308,7 +308,7 @@ export default function AdminDashboard() {
           </div>
 
           <button className="btn signup" type="submit">
-            Save Car to Inventory
+            Add Car to Inventory
           </button>
         </form>
       </div>

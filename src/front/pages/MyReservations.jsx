@@ -109,7 +109,7 @@ export default function MyReservations() {
                                                 onChange={(e) => setEditDates({ ...editDates, end_day: e.target.value })} />
                                         </div>
                                         <div className="col-md-2 d-flex align-items-end">
-                                            <button className="btn btn-success w-100" onClick={() => updateReservation(res.id)}>Save</button>
+                                            <button className="btn booking-button navbar-button-login w-100" onClick={() => updateReservation(res.id)}>Save</button>
                                         </div>
                                     </div>
                                 </div>

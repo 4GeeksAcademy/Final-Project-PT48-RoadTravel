@@ -39,13 +39,13 @@ const CardSubcompactCar = ({ vehicle }) => {
           
           
           
-          <li>License plate: {vehicle.license_plate}</li>
+          <li>License Plate: {vehicle.license_plate}</li>
           <li>Color: {vehicle.color}</li>
           <li>Price: ${vehicle.price}/day</li>
         </ul>
         <div className="container text-center">
         {store.startDates && store.endDates &&
-        <button className="btn btn-success"
+        <button className="btn booking-button navbar-button-login"
           onClick={() => {
             dispatch({ type: fav ? "removeFavorite" : "newFavorite", payload: vehicle });
             nav('/place-reservation/subcompact/'+ vehicle.license_plate );

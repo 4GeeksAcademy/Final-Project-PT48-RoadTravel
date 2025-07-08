@@ -123,11 +123,11 @@ export default function Booking() {
 
                                 <h5>{res.car_model} - {res.car_id}</h5>
                                 <p>
-                                    <strong>Date:</strong> {res.start_day} al {res.end_day}
+                                    <strong>Date:</strong> {res.start_day} to {res.end_day}
                                     <br />
                                     <strong>Price:</strong> ${res.amount}
                                     <br />
-                                    {res.license_number && <><strong>Licencia:</strong> {res.license_number}</>}
+                                    {res.license_number && <><strong>License Number:</strong> {res.license_number}</>}
                                 </p>
 
                                 <div className="d-flex gap-2 mt-2">
@@ -183,7 +183,7 @@ export default function Booking() {
                                             </div>
                                             <div className="col-md-2 d-flex align-items-end">
                                                 <button 
-                                                    className="btn btn-success w-100"
+                                                    className="btn booking-button navbar-button-login w-100"
                                                     onClick={() => updateReservation(res.id)}
                                                 >
                                                     Save
