@@ -1,52 +1,73 @@
-import React, { useEffect } from "react"
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
-import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
+import React, { useEffect } from "react";
+import useGlobalReducer from "../hooks/useGlobalReducer";
+import CardSubcompactCar from "../components/CardSubcompactCar.jsx";
+import CardMediumCar from "../components/CardMediumCar.jsx";
+import CardPremiumCar from "../components/CardPremiumCar.jsx";
+import { useNavigate } from "react-router-dom";
+import { Navbar } from "../components/Navbar.jsx";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-export const Home = () => {
+export default function Home() {
+  const navigate = useNavigate()
 
-	const { store, dispatch } = useGlobalReducer()
 
-	const loadMessage = async () => {
-		try {
-			const backendUrl = import.meta.env.VITE_BACKEND_URL
+  return (
+    
+    
+    <div>
+      <Navbar />
+      <div className="jumbotron">
+        <div className="container">
+          <h1 className="display-4 title-jumbotrone">Welcome to RoadTravel!</h1>
+          <p className="lead">Take control of your journey</p>
+          <hr className="my-4" />
+          <button onClick={() => navigate("/signup")} className="btn signup btn-lg" href="#" role="button">Let's start</button>
 
-			if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
+        </div>
 
-			const response = await fetch(backendUrl + "/api/hello")
-			const data = await response.json()
+      </div>
 
-			if (response.ok) dispatch({ type: "set_hello", payload: data.message })
+      <div className="container my-4">
+        <h2 className="text-center my-4">Our Different Categories</h2>
+        <div className="row d-flex justify-content-between container px-4">
+          <div className="col-md-4 card" style={{width: '340px'}}>
+            <img src="https://www.buyatoyota.com/sharpr/bat/assets/img/vehicle-info/corollahatchback/2025/hero-image.png" className="card-img-top imgsize" alt="..."/>
+              <div className="card-body">
+                <h3 className="text-center">SubCompact</h3>
+                <p>
+                  Affordable and fuel-efficient, perfect for solo travelers or couples looking for a budget-friendly option for city driving.
+                </p>
+              </div>
+          </div>
 
-			return data
+          <div className="col-md-4 card" style={{width: '340px'}}>
+            <img src="https://acroadtrip.blob.core.windows.net/catalogo-imagenes/l/RT_V_b79a2941f9cb4c828f58cfd716b087fc.jpg" className="card-img-top imgsize" alt="..."/>
+              <div className="card-body">
+                <h3 className="text-center">Medium</h3>
+                <p>
+                  A balanced choice with extra space and comfort, ideal for small families or groups needing more room for luggage and passengers.
+                </p>
+              </div>
+          </div>
 
-		} catch (error) {
-			if (error.message) throw new Error(
-				`Could not fetch the message from the backend.
-				Please check if the backend is running and the backend port is public.`
-			);
-		}
+          <div className="col-md-4 card" style={{width: '340px', height: '245'}}>
+            <img src="https://dodomat.com.my/cdn/shop/files/car-mat-McLaren720s-2018-present.png?v=1724999916" className="card-img-top imgsize" alt="..."/>
+              <div className="card-body">
+                <h3 className="text-center">Premium</h3>
+                <p>
+                  Top-tier performance and luxury features for those who value comfort, style, and a superior driving experience.
+                </p>
+              </div>
+          </div>
+        </div>
+      </div>
 
-	}
+      <div>
 
-	useEffect(() => {
-		loadMessage()
-	}, [])
+      </div>
+    </div>
 
-	return (
-		<div className="text-center mt-5">
-			<h1 className="display-4">Hello Rigo!!</h1>
-			<p className="lead">
-				<img src={rigoImageUrl} className="img-fluid rounded-circle mb-3" alt="Rigo Baby" />
-			</p>
-			<div className="alert alert-info">
-				{store.message ? (
-					<span>{store.message}</span>
-				) : (
-					<span className="text-danger">
-						Loading message from the backend (make sure your python 🐍 backend is running)...
-					</span>
-				)}
-			</div>
-		</div>
-	);
-}; 
+
+  );
+}
+

@@ -1,0 +1,103 @@
+body {
+  /* background: linear-gradient(135deg, #333, #555); */
+  background-color: whitesmoke;
+  color: #000000;
+  font-family: "Montserrat", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.jumbotron {
+  background-image: url("https://www.bmw-m.com/content/dam/bmw/marketBMW_M/www_bmw-m_com/all-models/m-automobile/m5-limousine/2024/bmw-m5-sedan-hd-01-2.jpg");
+  /* Agrega otras propiedades para asegurar que el fondo se vea bien */
+  background-size: cover; /* Para que la imagen cubra todo el jumbotron */
+  background-position: center; /* Para centrar la imagen */
+  background-repeat: no-repeat; /* Para evitar que la imagen se repita */
+  height: 400px; /* O cualquier altura que necesites para el jumbotron */
+  display: flex; /* Para centrar contenido si lo hay */
+  align-items: center;
+  justify-content: center;
+  color: white; /* Si tienes texto sobre la imagen */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Sombra para el texto */
+}
+
+.sides{
+  margin: 0;
+  padding: 0;
+}
+
+.title-jumbotrone{
+  color: orangered;
+  font-weight: bolder;
+}
+
+
+.nav-bar{
+  background-color: rgb(87, 16, 3);
+  color: white;
+}
+
+.nav-bar-button{
+  background-color: white;
+  color: rgb(87, 16, 3);
+}
+
+.booking-button{
+  background-color: rgb(87, 16, 3);
+  color: white;
+}
+
+.navbar-button-login:hover{
+  background-color: green;
+  color: white;
+}
+
+.navbar-button-signup:hover{
+  background-color: #0d6efd;
+  color: white;
+}
+
+.navbar-button-logout:hover{
+  background-color: red;
+  color: white;
+}
+
+.navbar-button-booking:hover{
+  background-color: #ffc107;
+  color: black;
+}
+
+.imgsize{
+  width: 314px;
+  height: 245px;
+}
+
+.footer{
+  background-color: rgb(147 27 6);
+  color: white;
+  height: 60px;
+}
+
+.signup{
+  background-color:  rgb(129, 24, 6) !important;
+  color: white;
+}
+
+.signup:hover{
+  background-color:  rgb(185, 34, 7) !important;
+  color: white;
+}
+
+.signup-form{
+  height: 750px;
+}
+
+.booking-vist{
+  min-height: 100vh; /* Ocupa al menos el 100% de la altura del viewport */
+  
+  width: 100%; /* Asegura que ocupe todo el ancho */
+}
+
+.no-direction{
+  flex-direction: row;
+}
